@@ -362,6 +362,10 @@ pre.code .c{color:var(--muted)} pre.code .del{color:#d98a6a} pre.code .add{color
             <li>Wrote MATLAB DSP scripts using FFT peak extraction and chirp matched filtering to process pool test recordings.</li>
             <li>Built a 2-FSK modem simulation to evaluate bit errors under noise before firmware development.</li>
             <li>Ran a 20–200 kHz sweep at 9 separations and identified a 149 kHz resonance with a transmit–receive Q of about 30.</li>
+            <li>Fitted a Butterworth–Van Dyke circuit model to measured transducer impedance in MATLAB.</li>
+            <li>Helped run pool testing at NREF (Sep 2026): impedance characterization, Tx/Rx sensitivity and reciprocity, ring-down, and chirp matched-filter channel sounding.</li>
+            <li>Measured received voltage and SNR against distance; the link held out to about 15 m in an Olympic-size pool, with range not limited by the pool's length.</li>
+            <li>Matched the 149 kHz peak to the transducers' length (axial) mode with a hand calculation, which led the team to re-pot new elements.</li>
           </ul>
         </div>
       </div>
@@ -499,7 +503,7 @@ pre.code .c{color:var(--muted)} pre.code .del{color:#d98a6a} pre.code .add{color
 <template id="t-modem">
   <p>The Autonomous Robotic Vehicle Project is building an FSK acoustic modem from piezoelectric ring transducers so its submarines can communicate underwater. I work on the signal processing and the transducer testing.</p>
   <dl class="specs">
-    <div><dt>Link range</dt><dd>15 m (tank-limited)</dd></div>
+    <div><dt>Link range</dt><dd>~15 m, pool not the limit</dd></div>
     <div><dt>Resonance</dt><dd>149 kHz, Q ≈ 30</dd></div>
     <div><dt>Sweep</dt><dd>20–200 kHz</dd></div>
     <div><dt>Modulation</dt><dd>2-FSK</dd></div>
@@ -507,8 +511,11 @@ pre.code .c{color:var(--muted)} pre.code .del{color:#d98a6a} pre.code .add{color
   <ul>
     <li>Wrote MATLAB DSP scripts using FFT peak extraction and chirp matched filtering to process pool recordings.</li>
     <li>Built a 2-FSK modem simulation with FFT-based detection to estimate bit errors under noise.</li>
-    <li>Ran a 20–200 kHz sweep at 9 separations and found the strongest response at 149 kHz. This showed the potted transducers were ringing in their length mode, not the 65 kHz radial mode on the spec sheet, and the team re-potted new elements.</li>
-    <li>Helped demonstrate a working acoustic link across the full 15 m test tank.</li>
+    <li>Ran a 20–200 kHz sweep at 9 separations and found the strongest response at 149 kHz. This showed the potted transducers were ringing in their length mode, not the 65 kHz radial mode on the spec sheet, and the team is re-potting new elements.</li>
+    <li>Fitted a Butterworth–Van Dyke circuit model to the measured impedance and matched the 149 kHz peak to the length (axial) mode with a hand calculation.</li>
+    <li>Helped run pool testing at NREF in Sep 2026: impedance characterization, Tx/Rx sensitivity and reciprocity, ring-down, and chirp matched-filter channel sounding.</li>
+    <li>Helped demonstrate a working acoustic link out to about 15 m in an Olympic-size pool, with range not limited by the pool's length.</li>
+    <li>Next up: system requirements, channel modelling and simulation, then PCB schematic and layout, with an eye on the RoboSub MathWorks Simulation Challenge.</li>
   </ul>
   <p style="color:var(--muted);font-size:15px;margin-top:18px">The chart on the project card shows the received 65 kHz signal level against distance in pool tiles, at 5 V drive.</p>
 </template>
