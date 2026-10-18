@@ -64,13 +64,6 @@ figcaption{font-size:15.5px;color:var(--muted);margin-top:10px}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#1b241f}
 footer{border-top:1px solid var(--line);padding-block:28px 44px;color:var(--muted);font-family:var(--display);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
-/* diagram */
-.dg .box{fill:#1b241f;stroke:#5a6d60;stroke-width:1.5}
-.dg .hot{stroke:#d7b46a;stroke-width:2}
-.dg .wire{stroke:#a7c3a0;stroke-width:2;fill:none}
-.dg .t{fill:#efe4cf;font:600 15px "EB Garamond",Georgia,serif}
-.dg .s{fill:#b4ad99;font:14px "EB Garamond",Georgia,serif}
-.dg .a{fill:#d7b46a;font:italic 14px "EB Garamond",Georgia,serif}
 @media (max-width:560px){body{font-size:18.5px}.dek{font-size:20px}}
 </style>
 </head>
@@ -97,32 +90,6 @@ footer{border-top:1px solid var(--line);padding-block:28px 44px;color:var(--mute
 
   <h2>How the power is laid out</h2>
   <p>It helps to know where the 3.3 V comes from. A single LDO regulator (an AP2112K) makes the main 3.3 V rail for the ESP32, the screen and the SD card. A P-channel MOSFET, switched by the ESP32, passes that rail on to the decoder side so the audio parts can be shut off in sleep. From there, a 1.8 V LDO powers the decoder's core and a second 3.3 V LDO powers its analog side.</p>
-  <figure>
-    <svg class="dg" viewBox="0 0 680 330" role="img" aria-labelledby="pt-t">
-      <title id="pt-t">Power tree: USB-C and the LiPo feed a BQ24074 charger, which feeds an AP2112K 3.3 V LDO. Its 3.3 V rail powers the ESP32, screen and SD card, and through a MOSFET switch feeds a 1.8 V LDO for the decoder core and a second 3.3 V LDO for the decoder's analog side. The bulk capacitor sits on the main 3.3 V rail.</title>
-      <rect class="box" x="20" y="40" width="120" height="56" rx="4"/><text class="t" x="80" y="64" text-anchor="middle">USB-C 5 V</text><text class="s" x="80" y="84" text-anchor="middle">charging</text>
-      <rect class="box" x="20" y="130" width="120" height="56" rx="4"/><text class="t" x="80" y="154" text-anchor="middle">LiPo 3.7 V</text><text class="s" x="80" y="174" text-anchor="middle">1000 mAh</text>
-      <rect class="box" x="180" y="84" width="120" height="56" rx="4"/><text class="t" x="240" y="108" text-anchor="middle">BQ24074</text><text class="s" x="240" y="128" text-anchor="middle">charger</text>
-      <path class="wire" d="M140 68 H160 V104 H180 M140 158 H160 V120 H180"/>
-      <rect class="box hot" x="340" y="84" width="130" height="56" rx="4"/><text class="t" x="405" y="108" text-anchor="middle">AP2112K</text><text class="s" x="405" y="128" text-anchor="middle">3.3 V LDO</text>
-      <path class="wire" d="M300 112 H340"/>
-      <path class="wire" d="M470 112 H520"/>
-      <text class="a" x="414" y="182">3.3 V rail</text>
-      <rect class="box" x="520" y="34" width="140" height="44" rx="4"/><text class="t" x="590" y="61" text-anchor="middle">ESP32</text>
-      <rect class="box" x="520" y="90" width="140" height="44" rx="4"/><text class="t" x="590" y="117" text-anchor="middle">Screen + SD card</text>
-      <path class="wire" d="M500 112 V56 H520 M500 112 H520"/>
-      <!-- bulk cap -->
-      <path class="wire" d="M490 112 V160" /><path d="M478 160 H502 M478 168 H502" stroke="#d7b46a" stroke-width="3"/><path class="wire" d="M490 168 V182"/><path d="M482 182 H498 M485 186 H495 M488 190 H492" stroke="#a7c3a0" stroke-width="1.5"/>
-      <text class="a" x="510" y="170">bulk cap</text><text class="a" x="510" y="188">22 → 100 µF</text>
-      <rect class="box" x="340" y="214" width="130" height="56" rx="4"/><text class="t" x="405" y="238" text-anchor="middle">AO3401A</text><text class="s" x="405" y="258" text-anchor="middle">switch (ESP32 IO26)</text>
-      <path class="wire" d="M405 140 V214"/>
-      <rect class="box" x="520" y="196" width="140" height="44" rx="4"/><text class="t" x="590" y="216" text-anchor="middle">1.8 V LDO</text><text class="s" x="590" y="233" text-anchor="middle">decoder core</text>
-      <rect class="box" x="520" y="252" width="140" height="44" rx="4"/><text class="t" x="590" y="272" text-anchor="middle">3.3 V LDO</text><text class="s" x="590" y="289" text-anchor="middle">decoder analog</text>
-      <path class="wire" d="M470 242 H500 V218 H520 M500 242 V274 H520"/>
-      <text class="s" x="20" y="316">Simplified from my schematic. The decoder (VS1053B) side can be switched off for sleep.</text>
-    </svg>
-    <figcaption>The power tree, simplified. Everything digital shares the main 3.3 V rail, so a sudden load on it affects the ESP32 too.</figcaption>
-  </figure>
 
   <h2>The test</h2>
   <p>I wrote a Python script that drives an Analog Discovery 2 as an oscilloscope and measures the noise on the 3.3 V rail. I ran it across five situations, from doing nothing up to the busiest thing I could do with the player. My target was under 200 mV of ripple in every case.</p>
