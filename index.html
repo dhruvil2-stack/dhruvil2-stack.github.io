@@ -315,6 +315,14 @@ pre.code .c{color:var(--muted)} pre.code .del{color:#d98a6a} pre.code .add{color
         </div>
       </li>
       <li>
+        <div class="when">Oct 2026 · ARVP</div>
+        <div>
+          <h3>Finding the usable band: about 45–60 kHz</h3>
+          <p>Instead of assuming the 65 kHz spec value, we tested carriers in the pool. The sweeps peaked near 51 kHz and were fairly flat from about 45 to 60 kHz. That gives us a measured band to pick the carrier from, rather than a number off the data sheet.</p>
+          <button class="more-link" type="button" data-open="modem">Read more →</button>
+        </div>
+      </li>
+      <li>
         <div class="when">Sep–Oct 2026 · ARVP</div>
         <div>
           <h3>A second resonance near 55 kHz</h3>
@@ -580,6 +588,7 @@ pre.code .c{color:var(--muted)} pre.code .del{color:#d98a6a} pre.code .add{color
     <div><dt>Link range</dt><dd>~15 m, pool not the limit</dd></div>
     <div><dt>Resonance</dt><dd>~149 kHz, axial mode</dd></div>
     <div><dt>Planned carrier</dt><dd>Near 55 kHz</dd></div>
+    <div><dt>Usable band</dt><dd>~45–60 kHz, peak ~51 kHz</dd></div>
     <div><dt>Model fit</dt><dd>2–3% RMS, two-branch BVD</dd></div>
     <div><dt>Modulation</dt><dd>2-FSK</dd></div>
   </dl>
@@ -595,6 +604,7 @@ pre.code .c{color:var(--muted)} pre.code .del{color:#d98a6a} pre.code .add{color
   <ul>
     <li>Ran a 20–200 kHz sweep at 9 separations and processed it with MATLAB FFT peak-finding. The strongest response was near 149 kHz, not the 65 kHz radial mode on the spec sheet, and a hand calculation matched it to the transducers' length (axial) mode.</li>
     <li>The pool tests also showed a resonance near 55 kHz, and the team plans to drive the transducers close to it. To pick the exact carrier, I suggested sending FSK bits at 50, 55, 60 and 65 kHz and keeping the frequency with the fewest bit errors.</li>
+    <li>Rather than staying at the 65 kHz spec value, I argued for testing carriers in the pool. The team's later sweeps peaked near 51 kHz and stayed fairly flat from about 45 to 60 kHz, which confirmed the band we can use.</li>
     <li>Recorded underwater impedance sweeps of both potted transducers and fitted Butterworth–Van Dyke (BVD) circuit models. A single-branch fit was off by about 12%; adding a lossy C0 and a second branch near 64 kHz brought it to about 2–3% RMS.</li>
     <li>Helped run pool testing at NREF: impedance, Tx/Rx sensitivity and reciprocity, ring-down, and chirp matched-filter channel sounding. At 5 V drive the average SNR went from about 41 dB up close to 14.5–17 dB at 16 inches (41 cm), with the Analog Discovery's own noise floor as the limit.</li>
     <li>On October 17, ran a gated-pulse sweep (0.5 ms bursts, 300 steps from 30–80 kHz) with one Analog Discovery transmitting and one recording, at separations of 20, 40 and 46 inches, about 1.5 ft from the pool wall. The aim is to pick the best carrier frequency, bandwidth and link budget.</li>
