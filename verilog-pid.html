@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Verilog PID controller · Dhruvil Patel</title>
+<meta name="description" content="Fixed-point PID controller in Verilog RTL with a self-checking testbench, and a deadband limit cycle found in closed-loop simulation.">
+<meta name="theme-color" content="#f5f7f3">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambarino@400&f[]=general-sans@400,500&display=swap">
+<link rel="stylesheet" href="../site.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="page-top">
+  <a class="mark" href="../">Dhruvil Patel</a>
+  <nav aria-label="Site"><a href="../#log">Build log</a><a href="../#work">Projects</a><a href="mailto:dhruvil2@ualberta.ca">Email</a></nav>
+</header>
+<main id="main">
+<div class="art-head" data-rise>
+  <h1>Verilog PID controller</h1>
+  <div class="meta"><span>Course project</span><span>Verilog · Vivado · Icarus · Python</span></div>
+  <p class="dek">A digital PID controller in Verilog RTL that regulates positional feedback for an electromechanical simulation. It uses Q8.8 fixed point with 48-bit intermediate sums, output saturation, integral clamping and a ±3 LSB deadband.</p>
+</div>
+<article class="art">
+<div class="specs"><p class="word">At a glance</p><dl><div><dt>Vectors checked</dt><dd>6,980, all pass</dd></div><div><dt>Planted bugs caught</dt><dd>3 of 3</dd></div><div><dt>Settling (fixed)</dt><dd>±0.4% by sample 54</dd></div><div><dt>Arithmetic</dt><dd>Q8.8, 48-bit sum</dd></div></dl></div>
+<h2>Testing it</h2>
+<ul>
+  <li>Built a vector-driven, self-checking testbench and a test plan covering 20+ edge-case classes: deadband boundaries, full-scale ±32767 inputs and swings, saturation limits, integrator windup and release, ramps and random inputs.</li>
+  <li>Wrote Python scripts that generate test vectors and a bit-exact reference model, so every output is compared automatically. All 6,980 vectors match.</li>
+  <li>Checked the testbench itself by planting bugs: a logical instead of arithmetic shift, a 16-bit error delta, and removed saturation. It flagged all three, with 3,434, 48 and 2,879 mismatches.</li>
+</ul>
+<h2>The controller that never settled</h2>
+<p>Put the RTL in a closed loop with a plant model. With the original deadband logic the output never settles: zeroing the output and wiping the integrator each time the error reaches ±3 kicks the plant back out, causing a limit cycle that swings between about 82% and 105% of the setpoint.</p>
+<p>Fixed it by holding the output and freezing the integrator inside the deadband. The loop now settles to within ±0.4%.</p>
+<pre aria-label="Deadband fix in Verilog"><code><span class="c">// DEADBAND: close enough, stop pushing</span>
+if (i_error &gt;= -16'sd3 &amp;&amp; i_error &lt;= 16'sd3) begin
+<span class="del">-   o_control    &lt;= 0;</span>
+<span class="del">-   integral_acc &lt;= 0;</span>
++   o_control    &lt;= o_control;     // hold last output
++   integral_acc &lt;= integral_acc;  // freeze integrator
+end</code></pre>
+<figure class="dark">
+  <img src="../img/pid-step.png" width="1500" height="930" loading="lazy" alt="Closed-loop step response of the PID RTL: original design oscillates between about 823 and 1047, fixed design settles at 1000.">
+  <figcaption>Closed-loop step response simulated in Icarus Verilog with the RTL in the loop, driving a first-order demo plant. The original design is in red, the fixed design in green.</figcaption>
+</figure>
+<p>Next steps: reduce the 32% overshoot by lowering Ki or raising Kd, take the derivative of the measurement instead of the error to avoid derivative kick, and round instead of floor in the Q8.8 shift.</p>
+</article>
+</main>
+<footer class="art-foot">
+  <p class="lbl">Next</p>
+  <a class="next" href="acoustic-modem.html">Underwater acoustic modem</a>
+  <div class="legal"><span>© 2026 Dhruvil Patel · <a href="mailto:dhruvil2@ualberta.ca">dhruvil2@ualberta.ca</a></span><a href="../">Home</a></div>
+</footer>
+</body>
+</html>

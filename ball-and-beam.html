@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ball and beam control system · Dhruvil Patel</title>
+<meta name="description" content="Course project: motor identification, cascaded controller design and hardware-in-the-loop testing to balance a ball on a beam.">
+<meta name="theme-color" content="#f5f7f3">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambarino@400&f[]=general-sans@400,500&display=swap">
+<link rel="stylesheet" href="../site.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="page-top">
+  <a class="mark" href="../">Dhruvil Patel</a>
+  <nav aria-label="Site"><a href="../#log">Build log</a><a href="../#work">Projects</a><a href="mailto:dhruvil2@ualberta.ca">Email</a></nav>
+</header>
+<main id="main">
+<div class="art-head" data-rise>
+  <h1>Ball and beam control system</h1>
+  <div class="meta"><span>Course project</span><span>MATLAB · Simulink Real-Time · Controls</span></div>
+  <p class="dek">A school project to balance a ball on a motor-driven beam, taken from motor identification through controller design to testing on real hardware.</p>
+</div>
+<article class="art">
+<div class="specs"><p class="word">At a glance</p><dl><div><dt>Settling time</dt><dd>&lt; 2 s</dd></div><div><dt>Steady-state error</dt><dd>0%</dd></div><div><dt>Overshoot</dt><dd>&lt; 10%</dd></div><div><dt>Disturbance recovery</dt><dd>&lt; 200 ms</dd></div></dl></div>
+<h2>What I did</h2>
+<ul>
+  <li>Characterized the DC motor from oscilloscope and bench data. Torque constant and rotor inertia matched the datasheet within about 5%.</li>
+  <li>Built first- and second-order plant models in Simulink and validated them against hardware with hardware-in-the-loop testing on an MF634 I/O board.</li>
+  <li>Compared voltage-mode and current-mode motor control in simulation, then chose cascaded PI current and velocity loops with a lead compensator for position, including anti-windup.</li>
+</ul>
+<figure>
+  <img src="../img/ball-beam-step.png" width="1467" height="922" loading="lazy" alt="Motor position step response over 10 seconds; the hardware trace closely overlays the simulation.">
+  <figcaption>Motor position step response, simulation vs. hardware.</figcaption>
+</figure>
+<div class="links"><a class="btn" href="https://github.com/dhruvil2-stack/Ball-and-Beam-Balancer">View on GitHub</a></div>
+</article>
+</main>
+<footer class="art-foot">
+  <p class="lbl">Next</p>
+  <a class="next" href="verilog-pid.html">Verilog PID controller</a>
+  <div class="legal"><span>© 2026 Dhruvil Patel · <a href="mailto:dhruvil2@ualberta.ca">dhruvil2@ualberta.ca</a></span><a href="../">Home</a></div>
+</footer>
+</body>
+</html>

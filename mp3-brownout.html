@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Why my MP3 player kept resetting · Dhruvil Patel</title>
+<meta name="description" content="Build log: how I tracked down random resets on my ESP32 MP3 player to a supply dip when skipping songs, and what I changed.">
+<meta name="theme-color" content="#f5f7f3">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambarino@400&f[]=general-sans@400,500&display=swap">
+<link rel="stylesheet" href="../site.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="page-top">
+  <a class="mark" href="../">Dhruvil Patel</a>
+  <nav aria-label="Site"><a href="../#log">Build log</a><a href="../#work">Projects</a><a href="mailto:dhruvil2@ualberta.ca">Email</a></nav>
+</header>
+<main id="main">
+<div class="art-head" data-rise>
+  <h1>Why my MP3 player kept resetting</h1>
+  <div class="meta"><span>Build log · MP3 player</span><span>October 2026</span><span>ESP32 · Power · Analog Discovery 2 · Python</span></div>
+  <p class="dek">My homemade music player rebooted itself whenever I skipped songs. Here’s how I narrowed it down to a dip on the power rail, what I changed, and what still isn’t fixed.</p>
+</div>
+<article class="art">
+<h2>The project</h2>
+<p>The player is a personal project: a fully offline music player on a 4-layer board I designed in Altium. An ESP32 reads songs from an SD card and streams them to a VS1053B audio decoder, and a small ST7735 screen shows what’s playing. It runs from a 1000 mAh LiPo and lives in a snap-fit case I printed. Once it worked I used it every day, and it got about 17 hours per charge.</p>
+<h2>The symptom</h2>
+<p>Every so often the player would reset and boot back up in the middle of a song. A random reset like that often points to the power supply, so before changing anything I wanted actual numbers.</p>
+<h2>How the power is laid out</h2>
+<p>It helps to know where the 3.3 V comes from. A single LDO regulator (an AP2112K) makes the main 3.3 V rail for the ESP32, the screen and the SD card. A P-channel MOSFET, switched by the ESP32, passes that rail on to the decoder side so the audio parts can be shut off in sleep. From there, a 1.8 V LDO powers the decoder’s core and a second 3.3 V LDO powers its analog side.</p>
+<h2>The test</h2>
+<p>I wrote a Python script that drives an Analog Discovery 2 as an oscilloscope and measures the noise on the 3.3 V rail. I ran it across five situations, from doing nothing up to the busiest thing I could do with the player. My target was under 200 mV of ripple in every case.</p>
+<table>
+  <thead><tr><th>What the player was doing</th><th>Result</th></tr></thead>
+  <tbody>
+    <tr><td>Idle, no music</td><td>Under 200 mV</td></tr>
+    <tr><td>Playing, screen off</td><td>Under 200 mV</td></tr>
+    <tr><td>Playing, screen on</td><td>Under 200 mV</td></tr>
+    <tr><td>Playing, scrolling through songs</td><td>Under 200 mV</td></tr>
+    <tr><td>Playing and skipping songs</td><td><b>About 300 mV; rail down to about 3.05 V</b></td></tr>
+  </tbody>
+</table>
+<p>Only the last case failed. While skipping songs, the noise climbed to about 300 mV and the rail sagged to around 3.05 V. The biggest dip I saw under heavy load was roughly 350 mV below where it should sit, which lined up with the kind of resets I’d been getting.</p>
+<h2>Why skipping songs, specifically</h2>
+<p>This is my understanding of it. Skipping a song makes several things happen at once: the SD card starts a new read and the decoder refills its buffer, so the current jumps for a moment. A regulator can’t react instantly to a sudden jump like that. For that brief moment, the capacitor sitting on the rail has to supply the extra current on its own, and its voltage drops while it does:</p>
+<div class="eq"><span>Δ<i>V</i> ≈ <i>I</i> · Δ<i>t</i> / <i>C</i></span><span class="why">ΔV is how far the rail dips, I the extra current during the burst, Δt how long the burst lasts before the regulator catches up, and C the bulk capacitance on the rail.</span></div>
+<p>So for the same burst, more capacitance means a smaller dip. I’d used 22 µF, which is a pretty standard value, and for the quieter cases it was fine.</p>
+<h2>What I changed</h2>
+<p>I swapped the 22 µF bulk capacitor for a 100 µF one. With almost five times the capacitance, the same burst should cause roughly a fifth of the dip, and after the change the skipping test passed.</p>
+<div class="callout">The “standard” value was a starting point, not a decision. Testing the busiest case on purpose is what showed it wasn’t enough.</div>
+<h2>What still isn’t solved</h2>
+<p>Later I built a tool called RailCheck, which lets me run the same rail tests on the real board more systematically. Every case passed except one: playing at maximum volume while skipping back and forth quickly. That’s the hardest load the player sees, and it still dips. So the bigger capacitor helped, but it isn’t the whole fix.</p>
+<p>That’s feeding into the second version of the board. I’m keeping linear regulators (LDOs) rather than switching to a buck converter, because a buck converter’s switching noise can end up in the audio. I’m also moving to an ESP32-S3 module and making the whole player thinner. The power path is one of the main things I’m redesigning.</p>
+<figure>
+  <img src="../img/mp3-pcb-top.png" width="460" height="658" loading="lazy" alt="Top side of the MP3 player PCB, rendered from the Gerber files." style="max-width:420px">
+  <figcaption>Top side of the board, rendered from my Gerber files. The analog section sits above the dividing line, the digital section below.</figcaption>
+</figure>
+<div class="links">
+  <a class="btn" href="https://drive.google.com/file/d/1-BPB9EZshVwInmu3_R_qBqkqG8TPMAxt/view?usp=sharing">Watch the player in use</a>
+  <a class="btn quiet" href="https://github.com/dhruvil2-stack/MP3-Player">Code and board files</a>
+</div>
+<h2>Further reading</h2>
+<ul class="refs">
+  <li>H. Johnson and M. Graham, <i>High-Speed Digital Design: A Handbook of Black Magic</i>, Prentice Hall, 1993, ch. 8 (power systems and bypass capacitance).</li>
+  <li>Diodes Inc., <i>AP2112: 600 mA CMOS LDO Regulator with Enable</i>, datasheet (load-transient response and output capacitor guidance).</li>
+  <li>Espressif Systems, <i>ESP32 Technical Reference Manual</i>, brownout detector section.</li>
+</ul>
+</article>
+</main>
+<footer class="art-foot">
+  <p class="lbl">Next</p>
+  <a class="next" href="../projects/mp3-player.html">The MP3 player project</a>
+  <div class="legal"><span>© 2026 Dhruvil Patel · <a href="mailto:dhruvil2@ualberta.ca">dhruvil2@ualberta.ca</a></span><a href="../">Home</a></div>
+</footer>
+</body>
+</html>

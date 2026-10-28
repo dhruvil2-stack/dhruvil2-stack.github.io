@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Peeling a second resonance out of a transducer · Dhruvil Patel</title>
+<meta name="description" content="How I separated two overlapping resonances in an underwater piezo transducer for the ARVP acoustic modem, by peeling one circuit branch off the other in MATLAB.">
+<meta name="theme-color" content="#f5f7f3">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambarino@400&f[]=general-sans@400,500&display=swap">
+<link rel="stylesheet" href="../site.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="page-top">
+  <a class="mark" href="../">Dhruvil Patel</a>
+  <nav aria-label="Site"><a href="../#log">Build log</a><a href="../#work">Projects</a><a href="mailto:dhruvil2@ualberta.ca">Email</a></nav>
+</header>
+<main id="main">
+<div class="art-head" data-rise>
+  <h1>Each answer needed the other</h1>
+  <div class="meta"><span>Build log · ARVP</span><span>October 2026</span><span>MATLAB · BVD modelling</span></div>
+  <p class="dek">Our underwater transducer has two resonances on top of each other. To measure the weak one I had to remove the strong one, but the strong one’s numbers were bent by the weak one. Here’s how I peeled them apart.</p>
+</div>
+<article class="art">
+<h2>What I was modelling</h2>
+<p>The ARVP RoboSub team is building an FSK acoustic modem from potted piezoelectric transducers. To design the transmit driver in LTspice we need a circuit that behaves like the transducer, so the simulation sees the right load.</p>
+<p>On October 17 we swept the impedance of each transducer underwater from 20 to 200 kHz, three times each, and I averaged the runs point by point. The standard circuit for this is the Butterworth–Van Dyke (BVD) model: a capacitor C0 for the ceramic itself, in parallel with a series R–L–C branch that stands in for the mechanical vibration (Van Dyke, 1928; IEEE Std 176-1987).</p>
+
+<h2>One branch wasn’t enough</h2>
+<p>The single-branch values come straight off the sweep. In admittance, Y = 1/Z, parallel parts simply add, so I worked there. The conductance G = Re(Y) peaks at the series resonance, f<sub>s</sub> = 151.7 kHz, and at that frequency L and C cancel, leaving only R. The resistance R<sub>s</sub> peaks at the anti-resonance, f<sub>p</sub> = 174.2 kHz.</p>
+<div class="eq">
+  <span>R<sub>1</sub> = 1 / G(<i>f</i><sub>s</sub>),&nbsp;&nbsp; C<sub>0</sub> = B(<i>f</i><sub>s</sub>) / 2π<i>f</i><sub>s</sub></span>
+  <span>C<sub>1</sub> = C<sub>0</sub> [ (<i>f</i><sub>p</sub>/<i>f</i><sub>s</sub>)² − 1 ],&nbsp;&nbsp; L<sub>1</sub> = 1 / (2π<i>f</i><sub>s</sub>)² C<sub>1</sub></span>
+  <span class="why">B = Im(Y) is the susceptance. At f<sub>s</sub> the branch is purely resistive, so all of B there belongs to C0.</span>
+</div>
+<p>That gave C0 = 4.46 nF, R1 = 122 Ω and Q ≈ 6 for the main mode. The model fits the resonance well, but below about 60 kHz it sits far above the measurement: 18.0% RMS error over the sweep and up to 29% near 40 kHz. That’s exactly where our carrier band is, 45 to 65 kHz, so it mattered.</p>
+<figure>
+  <img src="../img/t1-bvd-fit.png" width="1350" height="1575" loading="lazy" alt="Three stacked plots from 20 to 200 kHz for Transducer 1: impedance magnitude, phase and model error. Measured is a solid line, the one-branch model blue dots, the two-branch model red dots. The one-branch error is 25 to 29 percent below 45 kHz; the two-branch error stays within a few percent.">
+  <figcaption>The figure my script draws. Black is measured, blue is one branch, red is two branches after peeling. The phase plot shows it best: one branch sits flat near −90°, the real transducer doesn’t.</figcaption>
+</figure>
+
+<h2>The catch</h2>
+<p>The extra error is a second, weaker vibration mode. Transducers with more than one resonance need one R–L–C branch per mode (Sherman and Butler, 2007, ch. 13). To find the second branch, the obvious move is to subtract C0 and branch 1 from the measured admittance and look at what’s left.</p>
+<p>The problem is that C0 and R1 were read at 151.7 kHz, and the second branch is still contributing a little conductance and susceptance there. So C0 and branch 1 are slightly wrong until branch 2 is known, and branch 2 can’t be measured until C0 and branch 1 are right. Each one needs the other first.</p>
+
+<h2>Peeling, twice</h2>
+<p>The way around it is to guess, then correct. My script runs the same loop two times.</p>
+<ol>
+  <li><b>Subtract what you have.</b> Using the current C0 and branch 1, compute what’s left over:
+    <div class="eq"><span>Y<sub>left</sub> = Y − <i>j</i>ωC<sub>0</sub> − 1 / Z<sub>1</sub></span><span class="why">Z<sub>1</sub> = R<sub>1</sub> + <i>j</i>ωL<sub>1</sub> + 1/<i>j</i>ωC<sub>1</sub>, the branch 1 impedance at every frequency.</span></div></li>
+  <li><b>Find the hump.</b> The leftover conductance has a broad peak. I only search 30 to 100 kHz, because residue from the main mode piles up near 150 kHz. The peak sits at f<sub>2</sub> = 64.7 kHz, and R<sub>2</sub> = 1/G<sub>left,max</sub> = 1816 Ω.</li>
+  <li><b>Get its Q from one side.</b> The high side of the hump runs into branch 1, so I only use the low side: step left from the peak to half height, interpolate to land on it exactly, and use
+    <div class="eq"><span>Q<sub>2</sub> = 1 / ( <i>f</i><sub>2</sub>/<i>f</i><sub>lo</sub> − <i>f</i><sub>lo</sub>/<i>f</i><sub>2</sub> ) ≈ 1.06</span><span>L<sub>2</sub> = Q<sub>2</sub>R<sub>2</sub> / 2π<i>f</i><sub>2</sub>,&nbsp;&nbsp; C<sub>2</sub> = 1 / 2π<i>f</i><sub>2</sub>Q<sub>2</sub>R<sub>2</sub></span></div></li>
+  <li><b>Take branch 2 back out of the first readings.</b> Now that it’s known, remove its share at f<sub>s</sub> and redo branch 1:
+    <div class="eq"><span>C<sub>0</sub> = [ B(<i>f</i><sub>s</sub>) − Im Y<sub>2</sub>(<i>f</i><sub>s</sub>) ] / 2π<i>f</i><sub>s</sub></span><span>R<sub>1</sub> = 1 / [ G(<i>f</i><sub>s</sub>) − Re Y<sub>2</sub>(<i>f</i><sub>s</sub>) ]</span></div>
+    then recompute C1 and L1 with the new C0. On the second pass the loop starts from these corrected values.</li>
+</ol>
+<figure>
+  <img src="../img/t1-peel-residual.png" width="1350" height="690" loading="lazy" alt="Leftover conductance after subtracting C0 and branch 1, 20 to 130 kHz. Both passes show a broad hump peaking near 64.7 kHz. Above 100 kHz the first pass rises steeply while the second pass stays lower.">
+  <figcaption>The leftover after subtracting C0 and branch 1. Pass 1 rises again above 100 kHz because C0 was too small. With the corrected values, pass 2 doesn’t.</figcaption>
+</figure>
+<p>Two passes were enough: the second barely moved the numbers. The correction took C0 from 4.46 to 4.69 nF and R1 from 121.7 to 123.4 Ω.</p>
+
+<h2>What came out</h2>
+<table>
+  <thead><tr><th>Transducer 1</th><th>R</th><th>L</th><th>C</th><th>Resonance</th></tr></thead>
+  <tbody>
+    <tr><td>C0 (static)</td><td></td><td></td><td class="n">4.69 nF</td><td></td></tr>
+    <tr><td>Branch 1, main mode</td><td class="n">123 Ω</td><td class="n">0.738 mH</td><td class="n">1.49 nF</td><td class="n">151.7 kHz, Q ≈ 5.7</td></tr>
+    <tr><td>Branch 2, second mode</td><td class="n">1816 Ω</td><td class="n">4.75 mH</td><td class="n">1.27 nF</td><td class="n">64.7 kHz, Q ≈ 1.06</td></tr>
+  </tbody>
+</table>
+<p>The RMS error over the whole sweep went from 18.0% to 3.0%, and inside the 45–65 kHz carrier band from 17.2% to 1.1%. Afterwards I added a least-squares refinement with MATLAB’s fminsearch, a Nelder–Mead search (Lagarias et al., 1998), started from the peeled values. It brought the overall error to 1.7%, and it was needed on Transducer 2, where the coarse sweep grid had missed the true peak.</p>
+<div class="callout">The second mode is broad, with a Q near 1, and it sits right on our carrier band. That’s useful: it means the transducer can cover 45–65 kHz without smearing bits, and the model now gives the transmit driver the right load there.</div>
+
+<h2>Checking it in the pool</h2>
+<p>The model says the band around 45–65 kHz is usable. The same day we ran a gated-pulse sweep from 30 to 80 kHz at 20, 40 and 46 inches. The detections cluster between about 40 and 70 kHz, which agrees, though we’re still validating this data before using it for decisions.</p>
+<figure>
+  <img src="../img/pool-burst-scatter.png" width="1030" height="731" loading="lazy" alt="Scatter of detected spectral peak frequency against FFT peak magnitude for bursts at 20, 40 and 46 inches; most detections fall between 40 and 70 kHz.">
+  <figcaption>Preliminary burst detections, October 17 sweep. Blue 20 in, red 40 in, green 46 in.</figcaption>
+</figure>
+
+<div class="links"><a class="btn" href="../projects/acoustic-modem.html">More on the modem project</a><a class="btn quiet" href="../#log">Back to the build log</a></div>
+
+<h2>References</h2>
+<ul class="refs">
+  <li>K. S. Van Dyke, “The piezo-electric resonator and its equivalent network,” <i>Proceedings of the IRE</i>, vol. 16, no. 6, pp. 742–764, 1928.</li>
+  <li><i>IEEE Standard on Piezoelectricity</i>, ANSI/IEEE Std 176-1987.</li>
+  <li>C. H. Sherman and J. L. Butler, <i>Transducers and Arrays for Underwater Sound</i>, Springer, 2007.</li>
+  <li>J. C. Lagarias, J. A. Reeds, M. H. Wright and P. E. Wright, “Convergence properties of the Nelder–Mead simplex method in low dimensions,” <i>SIAM Journal on Optimization</i>, vol. 9, no. 1, pp. 112–147, 1998.</li>
+</ul>
+</article>
+</main>
+<footer class="art-foot">
+  <p class="lbl">Next</p>
+  <a class="next" href="../notes/mp3-brownout.html">Why my MP3 player kept resetting</a>
+  <div class="legal"><span>© 2026 Dhruvil Patel · <a href="mailto:dhruvil2@ualberta.ca">dhruvil2@ualberta.ca</a></span><a href="../">Home</a></div>
+</footer>
+</body>
+</html>

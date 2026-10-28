@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Dhruvil Patel · Build log</title>
-<meta name="description" content="Dhruvil Patel, third-year electrical engineering co-op student at the University of Alberta. A build log of an underwater acoustic modem, an MP3 player board and course projects.">
-<meta name="theme-color" content="#f7f9f8">
+<title>Dhruvil Patel · Electrical engineering student</title>
+<meta name="description" content="Dhruvil Patel, third-year electrical engineering co-op student at the University of Alberta. Projects: an underwater acoustic modem, an MP3 player board, controls and Verilog.">
+<meta name="theme-color" content="#f5f7f3">
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambarino@400&f[]=general-sans@400,500&display=swap">
@@ -14,190 +14,103 @@
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
-<section class="hero" aria-label="Introduction">
-<header class="top">
+<header class="bar">
   <a class="mark" href="./">Dhruvil Patel</a>
-  <nav aria-label="Sections"><a href="#log">Build log</a><a href="#work">Projects</a><a href="#about">About</a></nav>
-  <div class="right"><a href="mailto:dhruvil2@ualberta.ca">Email</a></div>
+  <nav aria-label="Sections"><a href="#projects">Projects</a><a href="#log">Build log</a><a href="#experience">Experience</a><a href="#contact">Contact</a></nav>
 </header>
-  <div></div>
-  <div class="now"><p>Right now I’m on the transmit circuit for ARVP’s underwater modem, and the second version of my MP3 player board.</p></div>
-  <div></div>
-  <div class="hero-body">
-    <h1><span class="line"><span>Dhruvil Patel’s</span></span><span class="line"><span style="--d:110ms">build log</span></span></h1>
-    <div class="lede">
-      <p>Third-year electrical engineering co-op student at the University of Alberta. These are notes on what I’m building, what broke and how I worked it out.</p>
-      <a class="btn" href="notes/bvd-peeling.html">Read the latest note</a>
-    </div>
-  </div>
-</section>
 
 <main id="main">
-<section class="compare" aria-labelledby="compare-h">
-  <div class="compare-head" data-rise>
-    <h2 id="compare-h">Each needed the other</h2>
-    <p>On the ARVP RoboSub team I modelled our underwater transducers as circuits. One resonance branch missed the measured impedance by 18%, because a second, weaker mode near 65 kHz was hiding underneath. To find that mode I had to subtract the first one, and the first one couldn’t be measured cleanly until the second was out.</p>
-    <p>Peeling them apart, twice, in MATLAB brought the miss down to 3%.</p>
-  </div>
-  <div class="specimens" aria-label="Model error before and after peeling">
-    <figure class="specimen" style="margin:0"><div class="big">18%</div><figcaption>RMS error with one branch</figcaption></figure>
-    <figure class="specimen" style="margin:0"><div class="big">3.0%</div><figcaption>With two branches, peeled twice</figcaption></figure>
-  </div>
+<section class="intro" aria-labelledby="intro-h">
+  <h1 id="intro-h">Dhruvil Patel</h1>
+  <p class="lead">Third-year electrical engineering co-op student at the University of Alberta. I like building hardware, measuring it, and figuring out why it didn’t work the first time.</p>
+  <div class="actions"><a class="btn" href="#projects">See my projects</a><a class="btn quiet" href="mailto:dhruvil2@ualberta.ca">Email me</a></div>
+  <dl class="facts">
+    <div><dt>Program</dt><dd>B.Sc. Electrical Eng., Co-op</dd></div>
+    <div><dt>Graduating</dt><dd>April 2029</dd></div>
+    <div><dt>GPA</dt><dd>3.4 / 4.0</dd></div>
+    <div><dt>Looking for</dt><dd>Co-op from Jan or May 2027</dd></div>
+  </dl>
 </section>
 
-<section class="peel" aria-labelledby="peel-h">
-  <div class="peel-grid">
-    <h2 id="peel-h">How the peel works</h2>
-    <p class="intro">A Butterworth–Van Dyke model treats a piezo transducer as a capacitor, C0, in parallel with one series R–L–C branch for each way it can vibrate.</p>
-    <ol class="steps" data-rise>
-      <li><b>Read the big mode off the sweep.</b> Conductance peaks at 151.7 kHz, so R1 = 1/G there, and C0 comes from the susceptance at the same point.</li>
-      <li><b>Subtract it.</b> Take C0 and branch 1 out of the measured admittance. What’s left is a hump near 65 kHz: the second mode.</li>
-      <li><b>Fit the hump.</b> Its height gives R2 = 1816 Ω and its low-side half-height width gives Q2 ≈ 1.06.</li>
-      <li><b>Go back.</b> Branch 2 was also inside the readings that set C0 and R1, so remove its share at 151.7 kHz, correct them (C0 4.46 → 4.69 nF), and peel again.</li>
-    </ol>
-    <div class="live" data-show="m1"
-      data-errmeas="—" data-whatmeas="The measured sweep on its own, averaged over three runs."
-      data-errm1="18.0%" data-whatm1="RMS error with one branch. It misses by up to 29% near 40 kHz."
-      data-errm2="3.0%" data-whatm2="RMS error after peeling, and 1.1% inside the 45–65 kHz carrier band.">
-      <div class="readout" aria-live="polite"><span class="num">18.0%</span><span class="what">RMS error with one branch.</span></div>
-      <div data-ui><svg viewBox="0 0 640 380" role="img" aria-labelledby="chart-t chart-d">
-<title id="chart-t">Transducer 1 impedance magnitude, 20 to 200 kHz</title>
-<desc id="chart-d">Measured impedance falls from about 1080 ohms at 20 kHz to a minimum near 147 kHz and peaks again near 176 kHz. The one-branch model sits well above the measurement below 60 kHz; the peeled two-branch model follows it closely across the whole sweep.</desc>
-<style>text{font:12px "General Sans",Arial,sans-serif;fill:#2f737d} .bl{font-size:12px;fill:#06525c}</style>
-<rect x="253.4" y="16" width="91.3" height="324" fill="#ebf0ee"/><text x="299.1" y="32" text-anchor="middle" class="bl">carrier band</text>
-<path d="M52.0,53.5 L54.9,55.1 L57.7,56.5 L60.6,57.9 L63.4,59.0 L66.3,60.0 L69.2,62.1 L72.0,63.4 L74.9,64.7 L77.7,65.7 L80.6,66.9 L83.5,68.8 L86.3,70.2 L89.2,71.4 L92.0,72.6 L94.9,74.3 L97.8,75.2 L100.6,76.3 L103.5,78.7 L106.3,79.6 L109.2,80.6 L112.1,81.4 L114.9,83.9 L117.8,85.1 L120.6,86.7 L123.5,87.7 L126.4,89.2 L129.2,89.4 L132.1,91.6 L134.9,93.1 L137.8,94.5 L140.7,96.4 L143.5,97.0 L146.4,98.3 L149.2,99.0 L152.1,100.9 L155.0,103.3 L157.8,104.2 L160.7,105.4 L163.5,105.6 L166.4,106.9 L169.3,108.9 L172.1,111.3 L175.0,112.0 L177.8,112.9 L180.7,114.2 L183.6,115.4 L186.4,118.5 L189.3,119.1 L192.1,119.7 L195.0,120.9 L197.9,123.0 L200.7,125.3 L203.6,125.7 L206.4,126.8 L209.3,128.0 L212.2,130.0 L215.0,131.4 L217.9,133.0 L220.7,134.5 L223.6,136.2 L226.5,137.1 L229.3,136.7 L232.2,138.3 L235.0,140.4 L237.9,141.8 L240.8,143.1 L243.6,143.4 L246.5,143.8 L249.3,147.0 L252.2,145.8 L255.1,147.8 L257.9,148.6 L260.8,148.8 L263.6,148.4 L266.5,152.6 L269.4,151.0 L272.2,151.1 L275.1,154.2 L277.9,154.5 L280.8,153.6 L283.7,154.5 L286.5,157.1 L289.4,157.3 L292.2,156.5 L295.1,159.5 L298.0,160.9 L300.8,160.2 L303.7,162.7 L306.5,164.4 L309.4,163.2 L312.3,164.7 L315.1,166.7 L318.0,167.7 L320.8,168.7 L323.7,168.8 L326.6,169.7 L329.4,170.7 L332.3,171.2 L335.1,174.5 L338.0,174.5 L340.9,174.2 L343.7,176.1 L346.6,178.5 L349.4,178.0 L352.3,177.5 L355.2,179.3 L358.0,182.1 L360.9,182.4 L363.7,183.5 L366.6,183.5 L369.5,185.4 L372.3,186.1 L375.2,188.4 L378.0,189.3 L380.9,190.2 L383.8,192.0 L386.6,192.3 L389.5,194.7 L392.3,195.7 L395.2,197.9 L398.1,198.1 L400.9,200.1 L403.8,200.3 L406.6,202.9 L409.5,203.4 L412.4,205.8 L415.2,206.6 L418.1,209.0 L420.9,210.3 L423.8,212.4 L426.7,214.0 L429.5,216.0 L432.4,218.0 L435.2,219.7 L438.1,222.0 L441.0,223.6 L443.8,226.0 L446.7,227.6 L449.5,229.8 L452.4,231.8 L455.3,233.6 L458.1,235.9 L461.0,237.6 L463.8,239.7 L466.7,242.0 L469.6,244.2 L472.4,246.3 L475.3,248.5 L478.1,250.7 L481.0,253.2 L483.9,255.3 L486.7,258.0 L489.6,260.5 L492.4,263.0 L495.3,265.7 L498.2,268.4 L501.0,271.3 L503.9,274.0 L506.7,277.4 L509.6,280.4 L512.5,283.6 L515.3,287.0 L518.2,290.5 L521.0,293.8 L523.9,297.1 L526.8,300.8 L529.6,304.1 L532.5,307.6 L535.3,311.1 L538.2,314.1 L541.1,316.3 L543.9,318.5 L546.8,319.3 L549.6,318.9 L552.5,316.5 L555.4,312.8 L558.2,306.5 L561.1,298.8 L563.9,288.7 L566.8,277.1 L569.7,264.0 L572.5,251.1 L575.4,237.4 L578.2,224.5 L581.1,211.4 L584.0,200.2 L586.8,190.9 L589.7,183.5 L592.5,179.0 L595.4,176.5 L598.3,175.9 L601.1,177.4 L604.0,180.2 L606.8,183.5 L609.7,187.1 L612.6,191.3 L615.4,195.7 L618.3,200.3 L621.1,204.8 L624.0,209.2" fill="none" stroke="#06525c" stroke-width="2.4" stroke-linejoin="round"/>
-<g class="m1" fill="#06525c"><circle cx="52.0" cy="28.0" r="2.2"/><circle cx="57.7" cy="30.6" r="2.2"/><circle cx="63.4" cy="33.3" r="2.2"/><circle cx="69.2" cy="35.9" r="2.2"/><circle cx="74.9" cy="38.5" r="2.2"/><circle cx="80.6" cy="41.1" r="2.2"/><circle cx="86.3" cy="43.8" r="2.2"/><circle cx="92.0" cy="46.4" r="2.2"/><circle cx="97.8" cy="49.0" r="2.2"/><circle cx="103.5" cy="51.7" r="2.2"/><circle cx="109.2" cy="54.3" r="2.2"/><circle cx="114.9" cy="56.9" r="2.2"/><circle cx="120.6" cy="59.6" r="2.2"/><circle cx="126.4" cy="62.2" r="2.2"/><circle cx="132.1" cy="64.8" r="2.2"/><circle cx="137.8" cy="67.5" r="2.2"/><circle cx="143.5" cy="70.1" r="2.2"/><circle cx="149.2" cy="72.8" r="2.2"/><circle cx="155.0" cy="75.4" r="2.2"/><circle cx="160.7" cy="78.1" r="2.2"/><circle cx="166.4" cy="80.7" r="2.2"/><circle cx="172.1" cy="83.4" r="2.2"/><circle cx="177.8" cy="86.1" r="2.2"/><circle cx="183.6" cy="88.7" r="2.2"/><circle cx="189.3" cy="91.4" r="2.2"/><circle cx="195.0" cy="94.1" r="2.2"/><circle cx="200.7" cy="96.7" r="2.2"/><circle cx="206.4" cy="99.4" r="2.2"/><circle cx="212.2" cy="102.1" r="2.2"/><circle cx="217.9" cy="104.8" r="2.2"/><circle cx="223.6" cy="107.5" r="2.2"/><circle cx="229.3" cy="110.2" r="2.2"/><circle cx="235.0" cy="112.9" r="2.2"/><circle cx="240.8" cy="115.6" r="2.2"/><circle cx="246.5" cy="118.3" r="2.2"/><circle cx="252.2" cy="121.0" r="2.2"/><circle cx="257.9" cy="123.7" r="2.2"/><circle cx="263.6" cy="126.5" r="2.2"/><circle cx="269.4" cy="129.2" r="2.2"/><circle cx="275.1" cy="132.0" r="2.2"/><circle cx="280.8" cy="134.7" r="2.2"/><circle cx="286.5" cy="137.5" r="2.2"/><circle cx="292.2" cy="140.3" r="2.2"/><circle cx="298.0" cy="143.1" r="2.2"/><circle cx="303.7" cy="145.8" r="2.2"/><circle cx="309.4" cy="148.7" r="2.2"/><circle cx="315.1" cy="151.5" r="2.2"/><circle cx="320.8" cy="154.3" r="2.2"/><circle cx="326.6" cy="157.2" r="2.2"/><circle cx="332.3" cy="160.0" r="2.2"/><circle cx="338.0" cy="162.9" r="2.2"/><circle cx="343.7" cy="165.8" r="2.2"/><circle cx="349.4" cy="168.7" r="2.2"/><circle cx="355.2" cy="171.7" r="2.2"/><circle cx="360.9" cy="174.6" r="2.2"/><circle cx="366.6" cy="177.6" r="2.2"/><circle cx="372.3" cy="180.6" r="2.2"/><circle cx="378.0" cy="183.7" r="2.2"/><circle cx="383.8" cy="186.7" r="2.2"/><circle cx="389.5" cy="189.8" r="2.2"/><circle cx="395.2" cy="193.0" r="2.2"/><circle cx="400.9" cy="196.2" r="2.2"/><circle cx="406.6" cy="199.4" r="2.2"/><circle cx="412.4" cy="202.7" r="2.2"/><circle cx="418.1" cy="206.0" r="2.2"/><circle cx="423.8" cy="209.4" r="2.2"/><circle cx="429.5" cy="212.9" r="2.2"/><circle cx="435.2" cy="216.4" r="2.2"/><circle cx="441.0" cy="220.1" r="2.2"/><circle cx="446.7" cy="223.8" r="2.2"/><circle cx="452.4" cy="227.6" r="2.2"/><circle cx="458.1" cy="231.6" r="2.2"/><circle cx="463.8" cy="235.7" r="2.2"/><circle cx="469.6" cy="239.9" r="2.2"/><circle cx="475.3" cy="244.4" r="2.2"/><circle cx="481.0" cy="249.0" r="2.2"/><circle cx="486.7" cy="253.9" r="2.2"/><circle cx="492.4" cy="259.1" r="2.2"/><circle cx="498.2" cy="264.6" r="2.2"/><circle cx="503.9" cy="270.5" r="2.2"/><circle cx="509.6" cy="276.8" r="2.2"/><circle cx="515.3" cy="283.6" r="2.2"/><circle cx="521.0" cy="290.9" r="2.2"/><circle cx="526.8" cy="298.7" r="2.2"/><circle cx="532.5" cy="306.6" r="2.2"/><circle cx="538.2" cy="314.1" r="2.2"/><circle cx="543.9" cy="319.5" r="2.2"/><circle cx="549.6" cy="320.2" r="2.2"/><circle cx="555.4" cy="312.8" r="2.2"/><circle cx="561.1" cy="295.5" r="2.2"/><circle cx="566.8" cy="270.0" r="2.2"/><circle cx="572.5" cy="239.8" r="2.2"/><circle cx="578.2" cy="209.1" r="2.2"/><circle cx="584.0" cy="182.3" r="2.2"/><circle cx="589.7" cy="164.8" r="2.2"/><circle cx="595.4" cy="159.5" r="2.2"/><circle cx="601.1" cy="163.7" r="2.2"/><circle cx="606.8" cy="172.4" r="2.2"/><circle cx="612.6" cy="182.4" r="2.2"/><circle cx="618.3" cy="192.2" r="2.2"/><circle cx="624.0" cy="201.2" r="2.2"/></g>
-<path class="m2" d="M52.0,55.0 L54.9,56.3 L57.7,57.6 L60.6,58.9 L63.4,60.2 L66.3,61.5 L69.2,62.8 L72.0,64.1 L74.9,65.5 L77.7,66.8 L80.6,68.1 L83.5,69.4 L86.3,70.7 L89.2,72.0 L92.0,73.3 L94.9,74.6 L97.8,75.9 L100.6,77.2 L103.5,78.6 L106.3,79.9 L109.2,81.2 L112.1,82.5 L114.9,83.8 L117.8,85.1 L120.6,86.4 L123.5,87.7 L126.4,89.0 L129.2,90.3 L132.1,91.6 L134.9,92.9 L137.8,94.2 L140.7,95.6 L143.5,96.9 L146.4,98.2 L149.2,99.5 L152.1,100.8 L155.0,102.1 L157.8,103.4 L160.7,104.6 L163.5,105.9 L166.4,107.2 L169.3,108.5 L172.1,109.8 L175.0,111.1 L177.8,112.4 L180.7,113.7 L183.6,114.9 L186.4,116.2 L189.3,117.5 L192.1,118.8 L195.0,120.0 L197.9,121.3 L200.7,122.6 L203.6,123.8 L206.4,125.1 L209.3,126.3 L212.2,127.6 L215.0,128.8 L217.9,130.0 L220.7,131.3 L223.6,132.5 L226.5,133.7 L229.3,134.9 L232.2,136.1 L235.0,137.3 L237.9,138.5 L240.8,139.7 L243.6,140.8 L246.5,142.0 L249.3,143.1 L252.2,144.3 L255.1,145.4 L257.9,146.5 L260.8,147.6 L263.6,148.7 L266.5,149.8 L269.4,150.8 L272.2,151.9 L275.1,152.9 L277.9,154.0 L280.8,155.0 L283.7,156.0 L286.5,157.0 L289.4,157.9 L292.2,158.9 L295.1,159.8 L298.0,160.7 L300.8,161.7 L303.7,162.6 L306.5,163.4 L309.4,164.3 L312.3,165.2 L315.1,166.0 L318.0,166.9 L320.8,167.7 L323.7,168.6 L326.6,169.4 L329.4,170.2 L332.3,171.0 L335.1,171.9 L338.0,172.7 L340.9,173.5 L343.7,174.4 L346.6,175.2 L349.4,176.1 L352.3,177.0 L355.2,177.9 L358.0,178.8 L360.9,179.8 L363.7,180.7 L366.6,181.7 L369.5,182.7 L372.3,183.8 L375.2,184.9 L378.0,186.0 L380.9,187.1 L383.8,188.3 L386.6,189.5 L389.5,190.7 L392.3,192.0 L395.2,193.3 L398.1,194.7 L400.9,196.1 L403.8,197.5 L406.6,199.0 L409.5,200.4 L412.4,202.0 L415.2,203.5 L418.1,205.1 L420.9,206.8 L423.8,208.4 L426.7,210.1 L429.5,211.9 L432.4,213.6 L435.2,215.4 L438.1,217.2 L441.0,219.1 L443.8,221.0 L446.7,222.9 L449.5,224.9 L452.4,226.9 L455.3,229.0 L458.1,231.1 L461.0,233.2 L463.8,235.3 L466.7,237.6 L469.6,239.8 L472.4,242.1 L475.3,244.5 L478.1,246.9 L481.0,249.4 L483.9,251.9 L486.7,254.5 L489.6,257.1 L492.4,259.9 L495.3,262.7 L498.2,265.6 L501.0,268.6 L503.9,271.7 L506.7,274.9 L509.6,278.2 L512.5,281.5 L515.3,285.0 L518.2,288.7 L521.0,292.4 L523.9,296.2 L526.8,300.0 L529.6,303.9 L532.5,307.7 L535.3,311.3 L538.2,314.7 L541.1,317.5 L543.9,319.5 L546.8,320.5 L549.6,319.9 L552.5,317.4 L555.4,312.8 L558.2,306.0 L561.1,297.0 L563.9,286.2 L566.8,273.9 L569.7,260.4 L572.5,246.3 L575.4,232.0 L578.2,217.9 L581.1,204.5 L584.0,192.5 L586.8,182.2 L589.7,174.4 L592.5,169.3 L595.4,166.8 L598.3,166.7 L601.1,168.5 L604.0,171.6 L606.8,175.6 L609.7,180.0 L612.6,184.7 L615.4,189.4 L618.3,194.1 L621.1,198.7 L624.0,203.1" fill="none" stroke="#2f737d" stroke-width="2" stroke-dasharray="6 5"/>
-<text x="52.0" y="366" text-anchor="middle">20</text><text x="152.7" y="366" text-anchor="middle">30</text><text x="253.4" y="366" text-anchor="middle">45</text><text x="344.8" y="366" text-anchor="middle">65</text><text x="451.8" y="366" text-anchor="middle">100</text><text x="552.5" y="366" text-anchor="middle">150</text><text x="624.0" y="366" text-anchor="middle">200</text><text x="44" y="325.7" text-anchor="end">100</text><text x="44" y="247.4" text-anchor="end">200</text><text x="44" y="144.0" text-anchor="end">500</text><text x="44" y="65.8" text-anchor="end">1000</text>
-<text x="624" y="379" text-anchor="end">kHz</text>
-<text x="4" y="20">|Z| Ω</text>
-</svg></div>
-      <div class="controls" role="group" aria-label="Model shown on the chart">
-        <button type="button" data-show="meas" aria-pressed="false">Measured only</button>
-        <button type="button" data-show="m1" aria-pressed="true">One branch</button>
-        <button type="button" data-show="m2" aria-pressed="false">Peeled, two branches</button>
+<section class="projects" id="projects" aria-labelledby="projects-h">
+  <div class="sec-head">
+    <h2 id="projects-h">Projects</h2>
+    <p>A mix of team, personal and course work. Each one has its own page with the details.</p>
+  </div>
+    <article class="proj">
+      <a class="pic" href="projects/acoustic-modem.html" tabindex="-1" aria-hidden="true"><img src="img/bvd-both.png" width="1200" height="690" loading="lazy" alt=""></a>
+      <div class="info">
+        <h3><a href="projects/acoustic-modem.html">Underwater acoustic modem</a></h3>
+        <p class="where">ARVP RoboSub team · Jul 2026 – now</p>
+        <p>Helping the team build a modem so our subs can talk underwater. I’ve tested and modelled the piezo transducers in MATLAB, and now I’m working on the transmit circuit.</p>
+        <p class="used"><span>Tools:</span> MATLAB, LTspice, Analog Discovery 2</p>
+        <a class="go" href="projects/acoustic-modem.html">Read about it <span aria-hidden="true">→</span></a>
       </div>
-      <p class="legend">Solid line: measured, Transducer 1, Oct 17 sweep. Dots: one-branch model. Dashed: two-branch model.</p>
-    </div>
-    <div class="peel-figs" data-rise>
-      <figure>
-        <img src="img/t1-bvd-fit.png" width="1350" height="1575" loading="lazy" alt="Three stacked plots from 20 to 200 kHz: impedance magnitude, phase and model error. The two-branch model follows the measured curve; the one-branch model is off by up to 29 percent below 60 kHz.">
-        <figcaption>Output of my MATLAB script: measured impedance against both models, and the error of each.</figcaption>
-      </figure>
-      <div class="side">
-        <figure>
-          <img src="img/t1-peel-residual.png" width="1350" height="690" loading="lazy" alt="Leftover conductance after subtracting C0 and branch 1, from 20 to 130 kHz. A broad hump peaks near 64.7 kHz. The second pass, with corrected values, removes the false rise above 100 kHz.">
-          <figcaption>What’s left after subtracting C0 and branch 1. The first pass still rises above 100 kHz; with the corrected values the second pass doesn’t.</figcaption>
-        </figure>
-        <a class="btn quiet" href="notes/bvd-peeling.html">The full write-up, with the maths</a>
+    </article>
+
+    <article class="proj">
+      <a class="pic tall board" href="projects/mp3-player.html" tabindex="-1" aria-hidden="true"><img src="img/mp3-pcb-top.png" width="460" height="658" loading="lazy" alt=""></a>
+      <div class="info">
+        <h3><a href="projects/mp3-player.html">MP3 player</a></h3>
+        <p class="where">Personal project · 2026</p>
+        <p>My own offline music player, from the circuit board to the firmware and a 3D-printed case. It runs about 17 hours per charge, and version two is in design.</p>
+        <p class="used"><span>Tools:</span> ESP32, C++, Altium, Fusion 360</p>
+        <a class="go" href="projects/mp3-player.html">Read about it <span aria-hidden="true">→</span></a>
       </div>
-    </div>
+    </article>
+
+    <article class="proj">
+      <a class="pic" href="projects/ball-and-beam.html" tabindex="-1" aria-hidden="true"><img src="img/ball-beam-step.png" width="1467" height="922" loading="lazy" alt=""></a>
+      <div class="info">
+        <h3><a href="projects/ball-and-beam.html">Ball and beam control system</a></h3>
+        <p class="where">Course project</p>
+        <p>Balancing a ball on a motor-driven beam, from identifying the motor to designing the controller and testing it on real hardware.</p>
+        <p class="used"><span>Tools:</span> MATLAB, Simulink Real-Time</p>
+        <a class="go" href="projects/ball-and-beam.html">Read about it <span aria-hidden="true">→</span></a>
+      </div>
+    </article>
+
+    <article class="proj">
+      <a class="pic dark" href="projects/verilog-pid.html" tabindex="-1" aria-hidden="true"><img src="img/pid-step.png" width="1500" height="930" loading="lazy" alt=""></a>
+      <div class="info">
+        <h3><a href="projects/verilog-pid.html">Verilog PID controller</a></h3>
+        <p class="where">Course project</p>
+        <p>A fixed-point PID controller in RTL. It passed every test vector, then a closed-loop simulation showed it never settled. I tracked down why and fixed it.</p>
+        <p class="used"><span>Tools:</span> Verilog, Vivado, Icarus, Python</p>
+        <a class="go" href="projects/verilog-pid.html">Read about it <span aria-hidden="true">→</span></a>
+      </div>
+    </article>
+
+  <div class="small-projects">
+    <div><h3>Heat safety wearable</h3><p class="where">ESP32 · low-power firmware</p><p>A helmet-mounted temperature monitor that warns workers of heatstroke risk. The firmware sleeps between readings and steps through five alert levels. I also tested LoRa and GPS for sites without Wi-Fi.</p></div>
+    <div><h3>Long-range LoRa rover</h3><p class="where">In planning</p><p>A three-person build: an STM32 car that relays LoRa driving commands to a small, fast scout car, with cameras on both.</p></div>
   </div>
 </section>
 
 <section class="log" id="log" aria-labelledby="log-h">
-  <div class="log-list" data-rise>
+  <div class="sec-head">
     <h2 id="log-h">Build log</h2>
-    <div class="group">
-      <p class="group-name">ARVP acoustic modem</p>
-      <ul>
-        <li><a href="notes/bvd-peeling.html"><span class="dot"></span><span class="t">Peeling a second resonance out of a transducer</span><span class="d">Oct 2026</span><span class="s">One circuit branch missed by 18%. Subtracting it, twice, uncovered a mode near 65 kHz and got the model to 3%.</span></a></li>
-        <li><a href="projects/acoustic-modem.html#band"><span class="dot"></span><span class="t">Finding the usable band: about 45–60 kHz</span><span class="d">Oct 2026</span><span class="s">Instead of assuming the 65 kHz spec value, we tested carriers in the pool. The sweeps peaked near 51 kHz.</span></a></li>
-        <li><a href="projects/acoustic-modem.html#second"><span class="dot"></span><span class="t">A second resonance near 55 kHz</span><span class="d">Sep–Oct 2026</span><span class="s">Close to the 65 kHz on the spec sheet. I suggested sending FSK bits at a few frequencies and keeping the one with the fewest errors.</span></a></li>
-        <li><a href="projects/acoustic-modem.html#axial"><span class="dot"></span><span class="t">Our 65 kHz transducers were ringing at 149 kHz</span><span class="d">Sep 2026</span><span class="s">A hand calculation matched it to the length mode of the tube rather than the radial mode.</span></a></li>
-      </ul>
-    </div>
-    <div class="group">
-      <p class="group-name">MP3 player</p>
-      <ul>
-        <li><a href="notes/mp3-brownout.html"><span class="dot alt"></span><span class="t">Why my MP3 player kept resetting</span><span class="d">Oct 2026</span><span class="s">A dip of a few hundred millivolts on every song skip. A bigger bulk capacitor fixed most of it; the hardest case is still open.</span></a></li>
-      </ul>
-    </div>
-    <div class="group">
-      <p class="group-name">Course projects</p>
-      <ul>
-        <li><a href="projects/verilog-pid.html"><span class="dot alt"></span><span class="t">A PID controller that never settled</span><span class="d">Verilog</span><span class="s">Every test vector passed, but in closed loop the deadband logic kept resetting the controller.</span></a></li>
-      </ul>
-    </div>
+    <p>Notes on things that broke and how I worked them out.</p>
   </div>
-  <figure class="log-fig" data-rise>
-    <img src="img/pool-burst-scatter.png" width="1030" height="731" loading="lazy" alt="Scatter of detected spectral peak frequency against FFT peak magnitude for bursts at 20, 40 and 46 inches. Detections cluster between about 40 and 70 kHz, strongest at 20 inches.">
-    <figcaption>Preliminary burst detections from the October 17 pool sweep, 30–80 kHz at three separations. Still being checked before we lean on it.</figcaption>
-  </figure>
+  <ul>
+<li><a href="notes/bvd-peeling.html"><span class="date">Oct 2026</span><span class="t">Two resonances, each hiding the other</span><span class="s">Our transducer had a weak second mode buried under the main one. Peeling them apart in MATLAB took the model from 18% error to 3%.</span></a></li>
+<li><a href="notes/mp3-brownout.html"><span class="date">Oct 2026</span><span class="t">Why my MP3 player kept resetting</span><span class="s">The supply dipped every time I skipped a song. A bigger capacitor fixed most of it.</span></a></li>
+<li><a href="projects/acoustic-modem.html#band"><span class="date">Oct 2026</span><span class="t">Finding the usable band: about 45–60 kHz</span><span class="s">We tested carriers in the pool instead of trusting the 65 kHz on the spec sheet.</span></a></li>
+<li><a href="projects/acoustic-modem.html#axial"><span class="date">Sep 2026</span><span class="t">Our 65 kHz transducers were ringing at 149 kHz</span><span class="s">A hand calculation matched it to the length mode of the tube.</span></a></li>
+<li><a href="projects/verilog-pid.html"><span class="date">Course</span><span class="t">A PID controller that never settled</span><span class="s">Every test passed, but the deadband logic kept kicking the loop back out.</span></a></li>
+  </ul>
 </section>
 
-<section class="work" id="work" aria-labelledby="work-h">
-  <h2 id="work-h">Projects</h2>
-
-  <article class="block" data-rise>
-    <div class="visual" style="--h:80svh"><img src="img/bvd-both.png" width="1200" height="690" loading="lazy" alt="Two-branch BVD model of both transducers underwater from 20 to 200 kHz, with the impedance minimum near 151 kHz and a weak second branch near 64 kHz."></div>
-    <div class="cluster">
-      <img class="pic" src="img/snr-distance.png" width="1200" height="660" loading="lazy" alt="Average SNR of the 65 kHz tone against separation: about 41 dB at 0 inches falling to 14.5–17 dB at 16 inches, above a 10 dB reference.">
-      <div class="row">
-        <h3><a href="projects/acoustic-modem.html">Acoustic modem</a></h3>
-        <p class="desc">With the ARVP RoboSub team, building an FSK modem so the subs can talk underwater. I’ve done transducer testing and modelling in MATLAB, and now the transmit circuit. <a class="more" href="projects/acoustic-modem.html">The modem in detail</a></p>
-      </div>
-    </div>
-  </article>
-
-  <article class="block" data-rise>
-    <div class="visual cover drift" style="--h:60svh"><img src="img/mp3-pcb-top.png" width="460" height="658" loading="lazy" alt="Top side of the MP3 player's 4-layer PCB, rendered from the Gerber files, with the analog section above and the digital section below."></div>
-    <div class="cluster">
-      <img class="pic" src="img/mp3-schematic.jpg" width="2509" height="1546" loading="lazy" alt="Full Altium schematic of the MP3 player: power, USB and the ESP32 on one side; the VS1053 decoder, its supply filters and the audio jack on the other.">
-      <div class="row">
-        <h3><a href="projects/mp3-player.html">MP3 player</a></h3>
-        <p class="desc">My own offline music player: an ESP32 and a VS1053B decoder on a 4-layer board I designed in Altium, in a printed case. About 17 hours per charge. <a class="more" href="projects/mp3-player.html">The board and firmware</a></p>
-      </div>
-    </div>
-  </article>
-
-  <article class="block" data-rise>
-    <div class="visual wide" style="--h:70svh"><img src="img/ball-beam-step.png" width="1467" height="922" loading="lazy" alt="Motor position step response over 10 seconds; the hardware trace closely overlays the simulation."></div>
-    <div class="cluster">
-      <div class="row">
-        <h3><a href="projects/ball-and-beam.html">Ball and beam</a></h3>
-        <p class="desc">Course project: motor identification, cascaded controller design and hardware-in-the-loop testing to balance a ball on a motor-driven beam. Settles in under 2 s. <a class="more" href="projects/ball-and-beam.html">The controller design</a></p>
-      </div>
-    </div>
-  </article>
-
-  <article class="block" data-rise>
-    <div class="visual dark wide" style="--h:66svh"><img src="img/pid-step.png" width="1500" height="930" loading="lazy" alt="Closed-loop step response of the PID RTL: the original design oscillates between about 823 and 1047, the fixed design settles at 1000."></div>
-    <div class="cluster">
-      <div class="row">
-        <h3><a href="projects/verilog-pid.html">Verilog PID</a></h3>
-        <p class="desc">Fixed-point PID in RTL. It passed 6,980 self-checked vectors, then a closed-loop simulation exposed a deadband limit cycle, which I fixed. <a class="more" href="projects/verilog-pid.html">How I found the bug</a></p>
-      </div>
-    </div>
-  </article>
-
-  <div class="also" data-rise>
-    <h3>Also</h3>
-    <div class="item"><p class="k">ESP32 · low-power firmware</p><b>Heat safety wearable</b><p>A helmet-mounted, battery-powered temperature monitor that warns workers of heatstroke risk. The C firmware sleeps between 60 s readings and escalates through a 5-state alert machine. I also tested LoRa and GPS modules for sending alerts from sites without Wi-Fi.</p></div>
-    <div class="item"><p class="k">In planning</p><b>Long-range LoRa rover</b><p>A three-person build: an STM32 mothership car that relays LoRa driving commands to a small, fast scout car, with cameras on both.</p></div>
+<section class="exp" id="experience" aria-labelledby="exp-h">
+  <div class="sec-head">
+    <h2 id="exp-h">Experience</h2>
   </div>
-</section>
-
-<section class="about" id="about" aria-labelledby="about-h">
-  <h2 id="about-h">About and experience</h2>
-  <div class="row" data-rise>
-    <dl class="facts">
-      <div><dt>Program</dt><dd>B.Sc. Electrical Eng., Co-op</dd></div>
-      <div><dt>School</dt><dd>University of Alberta</dd></div>
-      <div><dt>Graduating</dt><dd>April 2029</dd></div>
-      <div><dt>GPA</dt><dd>3.4 / 4.0</dd></div>
-    </dl>
-    <div class="para">
-      <p>I’m a third-year electrical engineering student in Edmonton. Most of my time outside class goes to the RoboSub team’s acoustic modem and to my own MP3 player board. The part I like best is when a measurement doesn’t match the datasheet and I have to work out why.</p>
-      <p>Outside of school you’ll usually find me snowboarding, rock climbing or road cycling.</p>
-    </div>
-  </div>
-  <div class="row">
-    <p class="word">Experience</p>
-    <div class="roles" data-rise>
-      <div class="role">
+  <div class="roles">
+    <div class="role">
+      <p class="when">Jul 2026 – Present</p>
+      <div>
         <h3>Electrical Team Member</h3>
-        <p class="org"><span>Autonomous Robotic Vehicle Project (ARVP) · Underwater Acoustic Modem · Edmonton, AB</span><span>Jul 2026 – Present</span></p>
+        <p class="org">Autonomous Robotic Vehicle Project (ARVP) · Underwater Acoustic Modem · Edmonton, AB</p>
         <ul>
           <li>Fitted a two-branch Butterworth–Van Dyke model to underwater impedance sweeps of both transducers, cutting RMS error from about 17% to 2–3% versus the closed-form formulas, and used it as the load in LTspice simulations of the Tx driver.</li>
           <li>Ran a scripted 300-step gated-pulse sweep (30–80 kHz) with two USB oscilloscopes to pick the carrier frequency and bandwidth.</li>
@@ -206,9 +119,12 @@
           <li>Ran and documented pool tests of reciprocity, ring-down and Tx/Rx sensitivity, automating the analysis in MATLAB.</li>
         </ul>
       </div>
-      <div class="role">
+    </div>
+    <div class="role">
+      <p class="when">Apr – Dec 2025</p>
+      <div>
         <h3>Engineering Intern</h3>
-        <p class="org"><span>North American Construction Group · Fort McMurray, AB</span><span>Apr – Dec 2025</span></p>
+        <p class="org">North American Construction Group · Fort McMurray, AB</p>
         <ul>
           <li>Integrated live GPS and fuel data through a REST API into an Excel fueling schedule, cutting fueling wait times by about 73%.</li>
           <li>Automated import, cleaning and validation of 10,000+ rows of sensor data with Excel VBA, saving about 6–7 hours a week.</li>
@@ -218,16 +134,19 @@
           <li>Wrote Job Safety Analyses while working on site around heavy mining equipment, with no incidents over 8 months.</li>
         </ul>
       </div>
-      <div class="role">
+    </div>
+    <div class="role">
+      <p class="when">Expected Apr 2029</p>
+      <div>
         <h3>B.Sc. Electrical Engineering, Co-op</h3>
-        <p class="org"><span>University of Alberta · GPA 3.4 / 4.0</span><span>Expected Apr 2029</span></p>
+        <p class="org">University of Alberta · GPA 3.4 / 4.0</p>
         <ul><li>Coursework: Control Systems, Embedded Systems, Power Engineering, Electronic Devices, Signals &amp; Systems, Digital Logic, Circuits I &amp; II.</li></ul>
       </div>
     </div>
   </div>
-  <div class="row">
-    <p class="word">Skills</p>
-    <dl class="skills" data-rise>
+  <div class="skills">
+    <h3>Skills</h3>
+    <dl>
       <div><dt>Digital design</dt><dd>Verilog (RTL), Vivado, self-checking testbenches, test plans, waveform debug, FPGA</dd></div>
       <div><dt>Programming</dt><dd>C, C++, Python, MATLAB, Simulink, Git, Excel VBA, Power BI</dd></div>
       <div><dt>Embedded</dt><dd>ESP32, Arduino, AVR (MPLAB X), SPI, I²C, UART, interrupts</dd></div>
@@ -237,27 +156,19 @@
 </section>
 
 <section class="contact" id="contact" aria-labelledby="contact-h">
-  <h2 id="contact-h">Get in touch</h2>
-  <p class="ask">Working on something similar, have a question about one of these projects, or have a co-op opening? I’d be glad to hear from you.</p>
-  <a class="mail" href="mailto:dhruvil2@ualberta.ca">dhruvil2@<span class="br"><br></span>ualberta.ca</a>
-  <div class="corners">
-    <p class="l">Edmonton, Alberta. Co-op availability: 8–12 months from January 2027, or 12–16 months from May 2027.</p>
-    <p class="r"><a href="https://www.linkedin.com/in/dhruvil-patel-305774300/">LinkedIn</a><a href="https://github.com/dhruvil2-stack">GitHub</a></p>
+  <div class="inner">
+    <h2 id="contact-h">Thanks for stopping by.</h2>
+    <p>I appreciate you taking the time to read through this. If you’re working on something similar, have a question about one of these projects, or have a co-op opening, I’d be glad to hear from you.</p>
+    <p class="mail"><a href="mailto:dhruvil2@ualberta.ca">dhruvil2@ualberta.ca</a></p>
+    <p class="links"><a href="https://www.linkedin.com/in/dhruvil-patel-305774300/">LinkedIn</a><a href="https://github.com/dhruvil2-stack">GitHub</a></p>
+    <p class="avail">Based in Edmonton. Available for an 8–12 month co-op from January 2027, or 12–16 months from May 2027. Outside of school I’m usually snowboarding, climbing or road cycling.</p>
   </div>
 </section>
 </main>
 
 <footer class="foot">
-  <p class="name" aria-hidden="true">Dhruvil Patel</p>
-  <div class="rowa">
-    <div class="places"><a href="mailto:dhruvil2@ualberta.ca">dhruvil2@ualberta.ca</a><a href="https://www.linkedin.com/in/dhruvil-patel-305774300/">LinkedIn</a><a href="https://github.com/dhruvil2-stack">GitHub</a></div>
-    <div class="cols">
-      <div><p>Notes</p><ul><li><a href="notes/bvd-peeling.html">Peeling a transducer</a></li><li><a href="notes/mp3-brownout.html">MP3 player resets</a></li></ul></div>
-      <div><p>Projects</p><ul><li><a href="projects/acoustic-modem.html">Acoustic modem</a></li><li><a href="projects/mp3-player.html">MP3 player</a></li><li><a href="projects/ball-and-beam.html">Ball and beam</a></li><li><a href="projects/verilog-pid.html">Verilog PID</a></li></ul></div>
-      <div><p>Elsewhere</p><ul><li><a href="https://github.com/dhruvil2-stack">GitHub</a></li><li><a href="https://www.linkedin.com/in/dhruvil-patel-305774300/">LinkedIn</a></li></ul></div>
-    </div>
-  </div>
-  <div class="legal"><span>© 2026 Dhruvil Patel · All figures are my own measurements and plots.</span><a href="#top" onclick="window.scrollTo({top:0});return false;">Back to top</a></div>
+  <span>© 2026 Dhruvil Patel</span>
+  <a href="#top">Back to top</a>
 </footer>
 </body>
 </html>

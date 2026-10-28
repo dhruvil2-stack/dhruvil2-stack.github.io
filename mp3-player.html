@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MP3 player · Dhruvil Patel</title>
+<meta name="description" content="A fully offline ESP32 + VS1053B MP3 player on a 4-layer PCB designed in Altium by Dhruvil Patel.">
+<meta name="theme-color" content="#f5f7f3">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambarino@400&f[]=general-sans@400,500&display=swap">
+<link rel="stylesheet" href="../site.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="page-top">
+  <a class="mark" href="../">Dhruvil Patel</a>
+  <nav aria-label="Site"><a href="../#log">Build log</a><a href="../#work">Projects</a><a href="mailto:dhruvil2@ualberta.ca">Email</a></nav>
+</header>
+<main id="main">
+<div class="art-head" data-rise>
+  <h1>MP3 player</h1>
+  <div class="meta"><span>Personal project</span><span>2026</span><span>ESP32 · C++ · Altium · Power design</span></div>
+  <p class="dek">A fully offline music player focused on clean audio and a compact build. An ESP32 drives a VS1053B decoder and a TFT display that shows the song, album, artist and duration. It plays MP3, WAV, FLAC and MIDI from an SD card, charges over USB-C, and lives in a two-piece snap-fit case I modelled in Fusion 360 and printed in PLA.</p>
+</div>
+<article class="art">
+<div class="specs"><p class="word">At a glance</p><dl><div><dt>Battery life</dt><dd>~17 hours</dd></div><div><dt>PCB</dt><dd>4-layer, 60.7 × 86.9 mm</dd></div><div><dt>Stackup</dt><dd>SIG–GND–PWR–SIG</dd></div><div><dt>Charging</dt><dd>USB-C, BQ24074</dd></div></dl></div>
+<h2>What I did</h2>
+<ul>
+  <li>Wrote ESP32 firmware in C++ that streams audio from the SD card over SPI to the decoder and reads the buttons over I²C on an interrupt line.</li>
+  <li>Designed the power domains, with a firmware-gated P-MOSFET switch that powers down the analog rails in sleep.</li>
+  <li>Traced brownout resets to a ~350 mV supply dip under load and redesigned the power path to fix it. <a href="../notes/mp3-brownout.html">The write-up</a>.</li>
+  <li>Split the supply into separate analog and digital LDOs to keep noise out of the audio path.</li>
+  <li>Ran the ESP32 on a single core to stretch battery life.</li>
+  <li>Hand-assembled the board with a soldering iron and hot-air station, and automated rail noise testing in Python with an Analog Discovery 2.</li>
+  <li>Rev 2 is in design: a thinner build, lower-cost tactile switches and a move to an ESP32-S3 module.</li>
+</ul>
+<div class="links"><a class="btn" href="https://drive.google.com/file/d/1-BPB9EZshVwInmu3_R_qBqkqG8TPMAxt/view?usp=sharing">Watch the demo video</a><a class="btn quiet" href="https://github.com/dhruvil2-stack/MP3-Player">Firmware, PCB files and case on GitHub</a></div>
+<figure>
+  <img src="../img/mp3-pcb-top.png" width="460" height="658" loading="lazy" alt="Top side of the MP3 player PCB, rendered from the Gerber files." style="max-width:460px">
+  <figcaption>Top side of the board, rendered from my Gerber files. The analog section sits above the dividing line, the digital section below.</figcaption>
+</figure>
+<figure>
+  <img src="../img/mp3-schematic.jpg" width="2509" height="1546" loading="lazy" alt="Full Altium schematic: digital half with USB-C, charger, ESP32 and I/O expander; analog half with VS1053 decoder, filters, LDOs and audio jack.">
+  <figcaption>The full schematic in Altium: power, USB and the ESP32 on the left; the VS1053 decoder, its supply filters and the audio jack on the right.</figcaption>
+</figure>
+</article>
+</main>
+<footer class="art-foot">
+  <p class="lbl">Next</p>
+  <a class="next" href="../notes/mp3-brownout.html">Why my MP3 player kept resetting</a>
+  <div class="legal"><span>© 2026 Dhruvil Patel · <a href="mailto:dhruvil2@ualberta.ca">dhruvil2@ualberta.ca</a></span><a href="../">Home</a></div>
+</footer>
+</body>
+</html>
