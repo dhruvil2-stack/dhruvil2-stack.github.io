@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dhruvil Patel · Electrical engineering student</title>
+<meta name="description" content="Dhruvil Patel, third-year electrical engineering co-op student at the University of Alberta. Projects: an underwater acoustic modem, an MP3 player board, controls and Verilog.">
+<meta name="theme-color" content="#f5f7f3">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambarino@400&f[]=general-sans@400,500&display=swap">
+<link rel="stylesheet" href="site.css">
+<script src="site.js" defer></script>
+</head>
+<body id="top">
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="mark" href="./">Dhruvil Patel</a>
+  <nav aria-label="Sections"><a href="#projects">Projects</a><a href="#log">Build log</a><a href="#experience">Experience</a><a href="#contact">Contact</a></nav>
+</header>
+
+<main id="main">
+<section class="intro" aria-labelledby="intro-h">
+  <h1 id="intro-h">Dhruvil Patel</h1>
+  <p class="lead">Third-year electrical engineering co-op student at the University of Alberta. I like building hardware, measuring it, and figuring out why it didn’t work the first time.</p>
+  <div class="actions"><a class="btn" href="#projects">See my projects</a><a class="btn quiet" href="mailto:dhruvil2@ualberta.ca">Email me</a></div>
+  <dl class="facts">
+    <div><dt>Program</dt><dd>B.Sc. Electrical Eng., Co-op</dd></div>
+    <div><dt>Graduating</dt><dd>April 2029</dd></div>
+    <div><dt>GPA</dt><dd>3.4 / 4.0</dd></div>
+    <div><dt>Looking for</dt><dd>Co-op from Jan or May 2027</dd></div>
+  </dl>
+</section>
+
+<section class="projects" id="projects" aria-labelledby="projects-h">
+  <div class="sec-head">
+    <h2 id="projects-h">Projects</h2>
+    <p>A mix of team, personal and course work. Each one has its own page with the details.</p>
+  </div>
+    <article class="proj">
+      <div class="pic"><img src="img/bvd-both.png" width="1200" height="690" loading="lazy" alt="Two-branch BVD impedance model of both transducers underwater, 20 to 200 kHz"></div>
+      <div class="info">
+        <h3><a href="projects/acoustic-modem.html">Underwater acoustic modem</a></h3>
+        <p class="where">ARVP RoboSub team · Jul 2026 – now</p>
+        <p>Helping the team build a modem so our subs can talk underwater. I’ve tested and modelled the piezo transducers in MATLAB, and now I’m working on the transmit circuit.</p>
+        <p class="used"><span>Tools:</span> MATLAB, LTspice, Analog Discovery 2</p>
+        <a class="go" href="projects/acoustic-modem.html">Read about it <span aria-hidden="true">→</span></a>
+      </div>
+    </article>
+
+    <article class="proj">
+      <div class="pic tall board"><img src="img/mp3-pcb-top.png" width="460" height="658" loading="lazy" alt="Top side of the MP3 player PCB, rendered from the Gerber files"></div>
+      <div class="info">
+        <h3><a href="projects/mp3-player.html">MP3 player</a></h3>
+        <p class="where">Personal project · 2026</p>
+        <p>My own offline music player, from the circuit board to the firmware and a 3D-printed case. It runs about 17 hours per charge, and version two is in design.</p>
+        <p class="used"><span>Tools:</span> ESP32, C++, Altium, Fusion 360</p>
+        <a class="go" href="projects/mp3-player.html">Read about it <span aria-hidden="true">→</span></a>
+      </div>
+    </article>
+
+    <article class="proj">
+      <div class="pic"><img src="img/ball-beam-step.png" width="1467" height="922" loading="lazy" alt="Motor position step response, simulation against hardware"></div>
+      <div class="info">
+        <h3><a href="projects/ball-and-beam.html">Ball and beam control system</a></h3>
+        <p class="where">Course project</p>
+        <p>Balancing a ball on a motor-driven beam, from identifying the motor to designing the controller and testing it on real hardware.</p>
+        <p class="used"><span>Tools:</span> MATLAB, Simulink Real-Time</p>
+        <a class="go" href="projects/ball-and-beam.html">Read about it <span aria-hidden="true">→</span></a>
+      </div>
+    </article>
+
+    <article class="proj">
+      <div class="pic dark"><img src="img/pid-step.png" width="1500" height="930" loading="lazy" alt="Closed-loop step response of the Verilog PID: the original design oscillates, the fixed design settles"></div>
+      <div class="info">
+        <h3><a href="projects/verilog-pid.html">Verilog PID controller</a></h3>
+        <p class="where">Personal project</p>
+        <p>A fixed-point PID controller in RTL. It passed every test vector, then a closed-loop simulation showed it never settled. I tracked down why and fixed it.</p>
+        <p class="used"><span>Tools:</span> Verilog, Vivado, Icarus, Python</p>
+        <a class="go" href="projects/verilog-pid.html">Read about it <span aria-hidden="true">→</span></a>
+      </div>
+    </article>
+
+  <div class="small-projects">
+    <div><h3>Heat safety wearable</h3><p class="where">ESP32 · low-power firmware</p><p>A helmet-mounted temperature monitor that warns workers of heatstroke risk. The firmware sleeps between readings and steps through five alert levels. I also tested LoRa and GPS for sites without Wi-Fi.</p></div>
+    <div><h3>Long-range LoRa rover</h3><p class="where">In planning</p><p>A three-person build: an STM32 car that relays LoRa driving commands to a small, fast scout car, with cameras on both.</p></div>
+  </div>
+</section>
+
+<section class="log" id="log" aria-labelledby="log-h">
+  <div class="sec-head">
+    <h2 id="log-h">Build log</h2>
+    <p>Notes on things that broke and how I worked them out.</p>
+  </div>
+  <ul>
+<li><a href="notes/bvd-peeling.html"><span class="date">Oct 2026</span><span class="t">Two resonances, each hiding the other</span><span class="s">Our transducer had a weak second mode buried under the main one. Peeling them apart in MATLAB took the model from 18% error to 3%.</span></a></li>
+<li><a href="notes/mp3-brownout.html"><span class="date">Oct 2026</span><span class="t">Why my MP3 player kept resetting</span><span class="s">The supply dipped every time I skipped a song. A bigger capacitor fixed most of it.</span></a></li>
+<li><a href="projects/acoustic-modem.html#band"><span class="date">Oct 2026</span><span class="t">Finding the usable band: about 45–60 kHz</span><span class="s">We tested carriers in the pool instead of trusting the 65 kHz on the spec sheet.</span></a></li>
+<li><a href="projects/acoustic-modem.html#axial"><span class="date">Sep 2026</span><span class="t">Our 65 kHz transducers were ringing at 149 kHz</span><span class="s">A hand calculation matched it to the length mode of the tube.</span></a></li>
+<li><a href="projects/verilog-pid.html"><span class="date">Personal</span><span class="t">A PID controller that never settled</span><span class="s">Every test passed, but the deadband logic kept kicking the loop back out.</span></a></li>
+  </ul>
+</section>
+
+<section class="exp" id="experience" aria-labelledby="exp-h">
+  <div class="sec-head">
+    <h2 id="exp-h">Experience</h2>
+  </div>
+  <div class="roles">
+    <div class="role">
+      <p class="when">Jul 2026 – Present</p>
+      <div>
+        <h3>Electrical Team Member</h3>
+        <p class="org">Autonomous Robotic Vehicle Project (ARVP) · Underwater Acoustic Modem · Edmonton, AB</p>
+        <ul>
+          <li>Fitted a two-branch Butterworth–Van Dyke model to underwater impedance sweeps of both transducers, cutting RMS error from about 17% to 2–3% versus the closed-form formulas, and used it as the load in LTspice simulations of the Tx driver.</li>
+          <li>Ran a scripted 300-step gated-pulse sweep (30–80 kHz) with two USB oscilloscopes to pick the carrier frequency and bandwidth.</li>
+          <li>Root-caused a ~149 kHz resonance versus the 65 kHz spec to the transducer’s axial mode using MATLAB FFT sweeps and hand calculations.</li>
+          <li>Measured received signal and SNR versus distance in pool tests, finding the oscilloscope’s noise floor was the limit on SNR, and verified the acoustic link out to 15 m.</li>
+          <li>Ran and documented pool tests of reciprocity, ring-down and Tx/Rx sensitivity, automating the analysis in MATLAB.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="role">
+      <p class="when">Apr – Dec 2025</p>
+      <div>
+        <h3>Engineering Intern</h3>
+        <p class="org">North American Construction Group · Fort McMurray, AB</p>
+        <ul>
+          <li>Integrated live GPS and fuel data through a REST API into an Excel fueling schedule, cutting fueling wait times by about 73%.</li>
+          <li>Automated import, cleaning and validation of 10,000+ rows of sensor data with Excel VBA, saving about 6–7 hours a week.</li>
+          <li>Debugged mismatches between equipment telemetry and field records, tracing them to ArcGIS geofence and capture settings.</li>
+          <li>Compared vendor specifications against SAP baselines on several $1M+ project bids, catching material discrepancies before kickoff.</li>
+          <li>Built Power BI dashboards of equipment telemetry for daily production meetings, supporting decisions that raised site productivity about 11%.</li>
+          <li>Wrote Job Safety Analyses while working on site around heavy mining equipment, with no incidents over 8 months.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="role">
+      <p class="when">Expected Apr 2029</p>
+      <div>
+        <h3>B.Sc. Electrical Engineering, Co-op</h3>
+        <p class="org">University of Alberta · GPA 3.4 / 4.0</p>
+        <ul><li>Coursework: Control Systems, Embedded Systems, Power Engineering, Electronic Devices, Signals &amp; Systems, Digital Logic, Circuits I &amp; II.</li></ul>
+      </div>
+    </div>
+  </div>
+  <div class="skills">
+    <h3>Skills</h3>
+    <dl>
+      <div><dt>Digital design</dt><dd>Verilog (RTL), Vivado, self-checking testbenches, test plans, waveform debug, FPGA</dd></div>
+      <div><dt>Programming</dt><dd>C, C++, Python, MATLAB, Simulink, Git, Excel VBA, Power BI</dd></div>
+      <div><dt>Embedded</dt><dd>ESP32, Arduino, AVR (MPLAB X), SPI, I²C, UART, interrupts</dd></div>
+      <div><dt>Lab and PCB</dt><dd>Altium Designer, LTspice, soldering and rework, H-bridge motor drives, oscilloscopes, Analog Discovery 2, Fusion 360, 3D printing</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="contact" id="contact" aria-labelledby="contact-h">
+  <div class="inner">
+    <h2 id="contact-h">Thanks for stopping by.</h2>
+    <p>I appreciate you taking the time to read through this. If you’re working on something similar, have a question about one of these projects, or have a co-op opening, I’d be glad to hear from you.</p>
+    <p class="mail"><a href="mailto:dhruvil2@ualberta.ca">dhruvil2@ualberta.ca</a></p>
+    <p class="links"><a href="https://www.linkedin.com/in/dhruvil-patel-305774300/">LinkedIn</a><a href="https://github.com/dhruvil2-stack">GitHub</a></p>
+    <p class="avail">Based in Edmonton. Available for an 8–12 month co-op from January 2027, or 12–16 months from May 2027. Outside of school I’m usually snowboarding, climbing or road cycling.</p>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <span>© 2026 Dhruvil Patel</span>
+  <a href="#top">Back to top</a>
+</footer>
+</body>
+</html>
