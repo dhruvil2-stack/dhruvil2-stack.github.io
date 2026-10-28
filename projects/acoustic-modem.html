@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Underwater acoustic modem · Dhruvil Patel</title>
+<meta name="description" content="ARVP RoboSub underwater acoustic modem: transducer testing, BVD modelling and transmit circuit work by Dhruvil Patel.">
+<meta name="theme-color" content="#f7f9f8">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambarino@400&f[]=general-sans@400,500&display=swap">
+<link rel="stylesheet" href="../site.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="page-top">
+  <a class="mark" href="../">Dhruvil Patel</a>
+  <nav aria-label="Site"><a href="../#log">Build log</a><a href="../#work">Projects</a><a href="mailto:dhruvil2@ualberta.ca">Email</a></nav>
+</header>
+<main id="main">
+<div class="art-head" data-rise>
+  <h1>Underwater acoustic modem</h1>
+  <div class="meta"><span>ARVP RoboSub team</span><span>Jul 2026 – present</span><span>MATLAB · DSP · LTspice · Piezo transducers</span></div>
+  <p class="dek">The Autonomous Robotic Vehicle Project is building an FSK acoustic modem from piezoelectric transducers so its submarines can communicate underwater. I’ve helped with transducer testing and modelling, and I’m now working on the transmit (Tx) chain.</p>
+</div>
+<article class="art">
+<div class="specs"><p class="word">At a glance</p><dl><div><dt>Link range</dt><dd>~15 m</dd></div><div><dt>Resonance</dt><dd>~149 kHz, axial mode</dd></div><div><dt>Planned carrier</dt><dd>Near 55 kHz</dd></div><div><dt>Usable band</dt><dd>~45–60 kHz</dd></div><div><dt>Model fit</dt><dd>3% RMS, peeled; 1.7% refined</dd></div><div><dt>Modulation</dt><dd>2-FSK</dd></div></dl></div>
+<h2>Where the project is</h2>
+<ul class="stagelist">
+  <li>Transducer characterization <span>done</span></li>
+  <li>System requirements <span>done</span></li>
+  <li class="now">Hardware: Tx/Rx circuits <span>now</span></li>
+  <li>Channel modelling <span>next</span></li>
+  <li>PCB design <span>later</span></li>
+  <li>Firmware <span>later</span></li>
+  <li>System test <span>later</span></li>
+</ul>
+<h2 id="axial">Ringing at 149 kHz</h2>
+<p>Ran a 20–200 kHz sweep at 9 separations and processed it with MATLAB FFT peak-finding. The strongest response was near 149 kHz, not the 65 kHz radial mode on the spec sheet, and a hand calculation matched it to the transducers’ length (axial) mode.</p>
+<h2 id="second">A second resonance near 55 kHz</h2>
+<p>The pool tests also showed a resonance near 55 kHz, and the team plans to drive the transducers close to it. To pick the exact carrier, I suggested sending FSK bits at 50, 55, 60 and 65 kHz and keeping the frequency with the fewest bit errors.</p>
+<h2 id="band">The usable band</h2>
+<p>Rather than staying at the 65 kHz spec value, I argued for testing carriers in the pool. The team’s later sweeps peaked near 51 kHz and stayed fairly flat from about 45 to 60 kHz, which confirmed the band we can use.</p>
+<p>On October 17, ran a gated-pulse sweep (0.5 ms bursts, 300 steps from 30–80 kHz) with one Analog Discovery transmitting and one recording, at separations of 20, 40 and 46 inches, about 1.5 ft from the pool wall. The aim is to pick the best carrier frequency, bandwidth and link budget.</p>
+<figure>
+  <img src="../img/pool-burst-scatter.png" width="1030" height="731" loading="lazy" alt="Scatter of detected spectral peak frequency against FFT peak magnitude for bursts at 20, 40 and 46 inches; most detections fall between 40 and 70 kHz.">
+  <figcaption>Preliminary burst detections from the October 17 sweep, still being validated.</figcaption>
+</figure>
+<h2>Circuit models of the transducers</h2>
+<p>Recorded underwater impedance sweeps of both potted transducers and fitted Butterworth–Van Dyke (BVD) circuit models. A single branch missed Transducer 1 by 18% RMS; peeling out a second branch near 65 kHz brought it to 3.0%, and a least-squares refinement to 1.7%. <a href="../notes/bvd-peeling.html">How the peeling works</a>.</p>
+<figure>
+  <img src="../img/bvd-both.png" width="1200" height="690" loading="lazy" alt="Underwater impedance magnitude from 20 to 200 kHz for two transducers: two-branch BVD model curves with measured minimum near 147 kHz and maximum near 180 kHz.">
+  <figcaption>Two-branch BVD model of both transducers underwater, plotted from my fitted values. Open circles are the measured impedance minimum and maximum.</figcaption>
+</figure>
+<h2>Pool testing</h2>
+<p>Helped run pool testing at NREF: impedance, Tx/Rx sensitivity and reciprocity, ring-down, and chirp matched-filter channel sounding. At 5 V drive the average SNR went from about 41 dB at 0 inches to 14.5–17 dB at 16 inches (41 cm), with the Analog Discovery’s own noise floor as the limit.</p>
+<figure>
+  <img src="../img/snr-distance.png" width="1200" height="660" loading="lazy" alt="Average SNR of the 65 kHz tone versus separation, two runs: about 41 dB at 0 inches, 25 to 28 dB at 8 inches, 19 to 24 dB at 12 inches, and 14.5 to 17 dB at 16 inches, all above a 10 dB reference line.">
+  <figcaption>Average SNR from the October 3 pool test, two recordings at each separation. The link stayed above 10 dB out to 16 inches, though the far runs had short dropouts from echoes.</figcaption>
+</figure>
+<h2>Now: the transmit chain</h2>
+<p>Built a 2-FSK modem simulation in MATLAB to estimate bit errors under noise.</p>
+<p>Now on the Tx chain, simulating the Tx and Rx circuits in LTspice around the OPA365 op-amp as the team moves into hardware prototypes. I also suggested reviewing the team’s older modem PCB design and carrying over any changes that would make a real difference.</p>
+</article>
+</main>
+<footer class="art-foot">
+  <p class="lbl">Next</p>
+  <a class="next" href="../notes/bvd-peeling.html">Peeling a second resonance out of a transducer</a>
+  <div class="legal"><span>© 2026 Dhruvil Patel · <a href="mailto:dhruvil2@ualberta.ca">dhruvil2@ualberta.ca</a></span><a href="../">Home</a></div>
+</footer>
+</body>
+</html>
