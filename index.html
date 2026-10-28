@@ -38,7 +38,7 @@
     <p>A mix of team, personal and course work. Each one has its own page with the details.</p>
   </div>
     <article class="proj">
-      <a class="pic" href="projects/acoustic-modem.html" tabindex="-1" aria-hidden="true"><img src="img/bvd-both.png" width="1200" height="690" loading="lazy" alt=""></a>
+      <div class="pic"><img src="img/bvd-both.png" width="1200" height="690" loading="lazy" alt="Two-branch BVD impedance model of both transducers underwater, 20 to 200 kHz"></div>
       <div class="info">
         <h3><a href="projects/acoustic-modem.html">Underwater acoustic modem</a></h3>
         <p class="where">ARVP RoboSub team · Jul 2026 – now</p>
@@ -49,7 +49,7 @@
     </article>
 
     <article class="proj">
-      <a class="pic tall board" href="projects/mp3-player.html" tabindex="-1" aria-hidden="true"><img src="img/mp3-pcb-top.png" width="460" height="658" loading="lazy" alt=""></a>
+      <div class="pic tall board"><img src="img/mp3-pcb-top.png" width="460" height="658" loading="lazy" alt="Top side of the MP3 player PCB, rendered from the Gerber files"></div>
       <div class="info">
         <h3><a href="projects/mp3-player.html">MP3 player</a></h3>
         <p class="where">Personal project · 2026</p>
@@ -60,7 +60,7 @@
     </article>
 
     <article class="proj">
-      <a class="pic" href="projects/ball-and-beam.html" tabindex="-1" aria-hidden="true"><img src="img/ball-beam-step.png" width="1467" height="922" loading="lazy" alt=""></a>
+      <div class="pic"><img src="img/ball-beam-step.png" width="1467" height="922" loading="lazy" alt="Motor position step response, simulation against hardware"></div>
       <div class="info">
         <h3><a href="projects/ball-and-beam.html">Ball and beam control system</a></h3>
         <p class="where">Course project</p>
@@ -71,10 +71,10 @@
     </article>
 
     <article class="proj">
-      <a class="pic dark" href="projects/verilog-pid.html" tabindex="-1" aria-hidden="true"><img src="img/pid-step.png" width="1500" height="930" loading="lazy" alt=""></a>
+      <div class="pic dark"><img src="img/pid-step.png" width="1500" height="930" loading="lazy" alt="Closed-loop step response of the Verilog PID: the original design oscillates, the fixed design settles"></div>
       <div class="info">
         <h3><a href="projects/verilog-pid.html">Verilog PID controller</a></h3>
-        <p class="where">Course project</p>
+        <p class="where">Personal project</p>
         <p>A fixed-point PID controller in RTL. It passed every test vector, then a closed-loop simulation showed it never settled. I tracked down why and fixed it.</p>
         <p class="used"><span>Tools:</span> Verilog, Vivado, Icarus, Python</p>
         <a class="go" href="projects/verilog-pid.html">Read about it <span aria-hidden="true">→</span></a>
@@ -97,7 +97,7 @@
 <li><a href="notes/mp3-brownout.html"><span class="date">Oct 2026</span><span class="t">Why my MP3 player kept resetting</span><span class="s">The supply dipped every time I skipped a song. A bigger capacitor fixed most of it.</span></a></li>
 <li><a href="projects/acoustic-modem.html#band"><span class="date">Oct 2026</span><span class="t">Finding the usable band: about 45–60 kHz</span><span class="s">We tested carriers in the pool instead of trusting the 65 kHz on the spec sheet.</span></a></li>
 <li><a href="projects/acoustic-modem.html#axial"><span class="date">Sep 2026</span><span class="t">Our 65 kHz transducers were ringing at 149 kHz</span><span class="s">A hand calculation matched it to the length mode of the tube.</span></a></li>
-<li><a href="projects/verilog-pid.html"><span class="date">Course</span><span class="t">A PID controller that never settled</span><span class="s">Every test passed, but the deadband logic kept kicking the loop back out.</span></a></li>
+<li><a href="projects/verilog-pid.html"><span class="date">Personal</span><span class="t">A PID controller that never settled</span><span class="s">Every test passed, but the deadband logic kept kicking the loop back out.</span></a></li>
   </ul>
 </section>
 
