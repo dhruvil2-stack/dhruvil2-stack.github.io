@@ -25,7 +25,7 @@
   <p class="dek">The Autonomous Robotic Vehicle Project is building an FSK acoustic modem from piezoelectric transducers so its submarines can communicate underwater. I’ve helped with transducer testing and modelling, and I’m now working on the transmit (Tx) chain.</p>
 </div>
 <article class="art">
-<div class="specs"><p class="word">At a glance</p><dl><div><dt>Link range</dt><dd>~15 m</dd></div><div><dt>Resonance</dt><dd>~149 kHz, axial mode</dd></div><div><dt>Planned carrier</dt><dd>Near 55 kHz</dd></div><div><dt>Usable band</dt><dd>~45–60 kHz</dd></div><div><dt>Model fit</dt><dd>3% RMS, peeled; 1.7% refined</dd></div><div><dt>Modulation</dt><dd>2-FSK</dd></div></dl></div>
+<div class="specs"><p class="word">At a glance</p><dl><div><dt>Link range</dt><dd>~15 m</dd></div><div><dt>Resonance</dt><dd>~149 kHz, axial mode</dd></div><div><dt>Carrier</dt><dd>Near 55 kHz</dd></div><div><dt>Usable band</dt><dd>~45–60 kHz</dd></div><div><dt>Model fit</dt><dd>3% RMS, peeled; 1.7% refined</dd></div><div><dt>Modulation</dt><dd>Frequency-hopped FSK</dd></div></dl></div>
 <h2>Where the project is</h2>
 <ul class="stagelist">
   <li>Transducer characterization <span>done</span></li>
@@ -39,7 +39,7 @@
 <h2 id="axial">Ringing at 149 kHz</h2>
 <p>Ran a 20–200 kHz sweep at 9 separations and processed it with MATLAB FFT peak-finding. The strongest response was near 149 kHz, not the 65 kHz radial mode on the spec sheet, and a hand calculation matched it to the transducers’ length (axial) mode.</p>
 <h2 id="second">A second resonance near 55 kHz</h2>
-<p>The pool tests also showed a resonance near 55 kHz, and the team plans to drive the transducers close to it. To pick the exact carrier, I suggested sending FSK bits at 50, 55, 60 and 65 kHz and keeping the frequency with the fewest bit errors.</p>
+<p>The pool tests also showed a resonance near 55 kHz, and the modem now runs close to it. To pick the exact carrier, I suggested sending FSK bits at 50, 55, 60 and 65 kHz and keeping the frequency with the fewest bit errors.</p>
 <h2 id="band">The usable band</h2>
 <p>Rather than staying at the 65 kHz spec value, I argued for testing carriers in the pool. The team’s later sweeps peaked near 51 kHz and stayed fairly flat from about 45 to 60 kHz, which confirmed the band we can use.</p>
 <p>On October 17, ran a gated-pulse sweep (0.5 ms bursts, 300 steps from 30–80 kHz) with one Analog Discovery transmitting and one recording, at separations of 20, 40 and 46 inches, about 1.5 ft from the pool wall. The aim is to pick the best carrier frequency, bandwidth and link budget.</p>
@@ -47,6 +47,9 @@
   <img src="../img/pool-burst-scatter.png" width="1030" height="731" loading="lazy" alt="Scatter of detected spectral peak frequency against FFT peak magnitude for bursts at 20, 40 and 46 inches; most detections fall between 40 and 70 kHz.">
   <figcaption>Preliminary burst detections from the October 17 sweep, still being validated.</figcaption>
 </figure>
+<h2 id="hop">Hopping between two tone pairs</h2>
+<p>The modem now uses frequency-hopped FSK near 55 kHz. One symbol uses 54 kHz for a 0 and 57 kHz for a 1, the next uses 55 kHz and 61 kHz, and the two sets alternate. That way, echoes of one symbol arrive while the receiver is listening on the other pair.</p>
+<p>The PWM frequency of the Arctos ESC, which was 60 kHz, has also been changed.</p>
 <h2>Circuit models of the transducers</h2>
 <p>Recorded underwater impedance sweeps of both potted transducers and fitted Butterworth–Van Dyke (BVD) circuit models. A single branch missed Transducer 1 by 18% RMS; peeling out a second branch near 65 kHz brought it to 3.0%, and a least-squares refinement to 1.7%. <a href="../notes/bvd-peeling.html">How the peeling works</a>.</p>
 <figure>
@@ -62,6 +65,7 @@
 <h2>Now: the transmit chain</h2>
 <p>Built a 2-FSK modem simulation in MATLAB to estimate bit errors under noise.</p>
 <p>Now on the Tx chain, simulating the Tx and Rx circuits in LTspice around the OPA365 op-amp as the team moves into hardware prototypes. I also suggested reviewing the team’s older modem PCB design and carrying over any changes that would make a real difference.</p>
+<p>That older design drives the transducer with a class D amplifier. We found too much noise on the digital side, so the team is looking at adding a 6th-order Sallen–Key high-pass filter. I’ve built the upgraded receive filtering in LTspice, but we don’t have the hardware for it yet.</p>
 </article>
 </main>
 <footer class="art-foot">
