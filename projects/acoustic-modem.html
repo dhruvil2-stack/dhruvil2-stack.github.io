@@ -39,7 +39,7 @@
   <p class="dek">The Autonomous Robotic Vehicle Project is building an FSK acoustic modem from piezoelectric transducers so its submarines can communicate underwater. I’ve helped with transducer testing and modelling, and I’m now working on the transmit (Tx) chain.</p>
 </div>
 <article class="art">
-<dl class="specs"><div><dt>Link range</dt><dd>~15 m</dd></div><div><dt>Resonance</dt><dd>~149 kHz, axial mode</dd></div><div><dt>Carrier</dt><dd>Near 55 kHz</dd></div><div><dt>Usable band</dt><dd>~45–60 kHz</dd></div><div><dt>Model fit</dt><dd>3% RMS, peeled; 1.7% refined</dd></div><div><dt>Modulation</dt><dd>Frequency-hopped FSK</dd></div></dl>
+<dl class="specs"><div><dt>Link range</dt><dd>~15 m</dd></div><div><dt>Resonance</dt><dd>~149 kHz, axial mode</dd></div><div><dt>Carrier</dt><dd>Near 55 kHz</dd></div><div><dt>Usable band</dt><dd>~45–60 kHz</dd></div><div><dt>Model fit</dt><dd>3% RMS, peeled; 1.7% refined</dd></div><div><dt>Modulation</dt><dd>Frequency-hopped FSK</dd></div><div><dt>Drive matching</dt><dd>Series 1.16 mH, ~21× power</dd></div></dl>
 <h2>Where the modem is now</h2>
 <ul class="stagelist">
   <li>Transducer characterization <span>done</span></li>
@@ -76,6 +76,17 @@
   <div class="panel"><img src="../img/snr-distance.png" width="1200" height="660" loading="lazy" alt="Average SNR of the 65 kHz tone versus separation, two runs: about 41 dB at 0 inches, 25 to 28 dB at 8 inches, 19 to 24 dB at 12 inches, and 14.5 to 17 dB at 16 inches, all above a 10 dB reference line."></div>
   <figcaption>Average SNR from the October 3 pool test, two recordings at each separation. The link stayed above 10 dB out to 16 inches, though the far runs had short dropouts from echoes.</figcaption>
 </figure>
+<h2 id="match">Matching the transducer to the driver</h2>
+<p>At 55&nbsp;kHz the transducer doesn’t look like a resistor. From the measured sweep it’s about 88&nbsp;Ω in series with −j400&nbsp;Ω, so it behaves mostly like a capacitor, and a 6&nbsp;V drive only pushes about 10&nbsp;mW into it.</p>
+<p>An inductor in series adds +j400&nbsp;Ω and cancels that. The value comes straight from the reactance:</p>
+<div class="eq"><span><i>L</i> = 400&nbsp;Ω / (2π · 55&nbsp;kHz) ≈ 1.16&nbsp;mH</span><span>P<sub>matched</sub> / P<sub>unmatched</sub> = |<i>Z</i>|² / <i>R</i>² = 1 + <i>Q</i><sub>e</sub>² ≈ 21</span><span class="why">With the reactance gone, the amplifier sees about 88 Ω of plain resistance. Q<sub>e</sub> ≈ 4.5 is the transducer’s electrical Q at 55 kHz.</span></div>
+<p>I checked it in LTspice with the two-branch BVD model as the load, a 0.5&nbsp;Ω source resistance standing in for the amplifier, and the inductor stepped between almost nothing and 1.157&nbsp;mH. At 6&nbsp;V the power into the transducer at 55&nbsp;kHz went from about 10&nbsp;mW to about 200&nbsp;mW.</p>
+<figure>
+  <div class="panel"><img src="../img/ltspice-matching.jpg" width="1917" height="951" loading="lazy" alt="LTspice AC sweep from 20 to 200 kHz. Top: power into the transducer, about 200 mW peaking at 55 kHz with the matching inductor, and only about 10 mW in band without it, where the unmatched curve instead peaks near 150 kHz. Bottom: voltage across the transducer, peaking near 27 V at 55 kHz. Below: the schematic with a 6 V AC source, 0.5 ohm source resistance, the stepped matching inductor and the two-branch BVD model."></div>
+  <figcaption>My LTspice sweep at 6&nbsp;V. Top: power into the transducer with the 1.157&nbsp;mH inductor (red) and without it (blue). Bottom: voltage across the transducer, about 27&nbsp;V at 55&nbsp;kHz with the inductor. The schematic is underneath.</figcaption>
+</figure>
+<p>Without the inductor, the transducer takes power most easily at its own main resonance near 150&nbsp;kHz, which is outside our band. The inductor moves that peak down to the carrier. It isn’t free, though: the transducer now sees about 27&nbsp;V, the amplifier has to supply about 67&nbsp;mA, and the gain is narrow, with the 45 and 65&nbsp;kHz band edges a few dB below the peak.</p>
+<p>For the part, I picked a Bourns SRR1260A-102K (1.0&nbsp;mH). On its own it puts the peak near 60&nbsp;kHz, so the team is deciding between adding about 150&nbsp;µH to stay at 55&nbsp;kHz or moving the carrier up to around 60&nbsp;kHz.</p>
 <h2>Now: the transmit chain</h2>
 <p>Built a 2-FSK modem simulation in MATLAB to estimate bit errors under noise.</p>
 <p>Now on the Tx chain, simulating the Tx and Rx circuits in LTspice around the OPA365 op-amp as the team moves into hardware prototypes. I also suggested reviewing the team’s older modem PCB design and carrying over any changes that would make a real difference.</p>
