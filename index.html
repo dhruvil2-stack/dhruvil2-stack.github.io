@@ -37,7 +37,7 @@
 <section class="hero" aria-labelledby="intro-h">
   <div>
     <h1 id="intro-h">Dhruvil Patel</h1>
-    <p class="lead">Electrical engineering co-op student at the University&nbsp;of&nbsp;Alberta. I build hardware, measure it, and work out why it didn’t work the first&nbsp;time.</p>
+    <p class="lead">Electrical engineering co-op student at the University&nbsp;of&nbsp;Alberta. I work on embedded systems, circuit design and testing, through team, course and personal&nbsp;projects.</p>
     <div class="actions">
       <a class="btn" href="mailto:dhruvil2@ualberta.ca"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-mail"></use></svg>Email me</a>
       <a class="textlink" href="#projects">See my projects<svg class="i i-d" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-down"></use></svg></a>
@@ -50,7 +50,7 @@
         <img src="img/mp3-pcb-top.png" width="460" height="658" alt="Top side of my MP3 player circuit board, rendered from the Gerber files">
         <span class="play"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"></use></svg>Watch it play music</span>
       </a>
-      <figcaption><span>My MP3 player, from the board up.</span><a href="projects/mp3-player.html">How I built it<svg class="i i-r" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></figcaption>
+      <figcaption><span>The MP3 player I designed and built.</span><a href="projects/mp3-player.html">How I built it<svg class="i i-r" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></figcaption>
   </figure>
 </section>
 
@@ -111,9 +111,9 @@
     <p>Short write-ups on things that broke and how I worked them out.</p>
   </div>
   <ul>
-<li><a href="projects/acoustic-modem.html#match"><span class="date">Nov 2026</span><span class="t">One inductor, about 21× the&nbsp;power</span><span class="s">At 55&nbsp;kHz our transducer looks mostly like a capacitor. A 1.16&nbsp;mH series inductor cancels it, and in LTspice the power at 6&nbsp;V went from about 10&nbsp;mW to&nbsp;200&nbsp;mW.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
-<li><a href="projects/acoustic-modem.html#hop"><span class="date">Oct 2026</span><span class="t">Alternating tone pairs so echoes miss the&nbsp;receiver</span><span class="s">The modem now hops between 54/57&nbsp;kHz and 55/61&nbsp;kHz on every other symbol. An echo from one symbol lands on the pair we aren’t listening to.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
-<li><a href="notes/bvd-peeling.html"><span class="date">Oct 2026</span><span class="t">Two resonances, each hiding the&nbsp;other</span><span class="s">Our transducer had a weak second mode buried under the main one. Peeling them apart in MATLAB took the model from 18% error to&nbsp;3%.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
+<li><a href="projects/acoustic-modem.html#match"><span class="date">Nov 2026</span><span class="t">Impedance matching the transducer&nbsp;driver</span><span class="s">At 55&nbsp;kHz our transducer looks mostly like a capacitor. A 1.16&nbsp;mH series inductor cancels it, and in LTspice the power at 6&nbsp;V went from about 10&nbsp;mW to&nbsp;200&nbsp;mW.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
+<li><a href="projects/acoustic-modem.html#hop"><span class="date">Oct 2026</span><span class="t">Frequency hopping to reduce echo&nbsp;errors</span><span class="s">The modem now hops between 54/57&nbsp;kHz and 55/61&nbsp;kHz on every other symbol. An echo from one symbol lands on the pair we aren’t listening to.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
+<li><a href="notes/bvd-peeling.html"><span class="date">Oct 2026</span><span class="t">Modelling a transducer with two&nbsp;resonances</span><span class="s">Our transducer had a weak second mode buried under the main one. Peeling them apart in MATLAB took the model from 18% error to&nbsp;3%.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
 <li><a href="notes/mp3-brownout.html"><span class="date">Oct 2026</span><span class="t">Why my MP3 player kept&nbsp;resetting</span><span class="s">The supply dipped every time I skipped a song. A bigger capacitor fixed most of&nbsp;it.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
 <li><a href="projects/acoustic-modem.html#band"><span class="date">Oct 2026</span><span class="t">Finding the usable band: about 45–60&nbsp;kHz</span><span class="s">We tested carriers in the pool instead of trusting the 65&nbsp;kHz on the spec&nbsp;sheet.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
 <li><a href="projects/acoustic-modem.html#axial"><span class="date">Sep 2026</span><span class="t">Our 65&nbsp;kHz transducers were ringing at 149&nbsp;kHz</span><span class="s">A hand calculation matched it to the length mode of the&nbsp;tube.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>

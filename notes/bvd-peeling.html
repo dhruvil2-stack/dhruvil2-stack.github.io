@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Peeling a second resonance out of a transducer · Dhruvil Patel</title>
+<title>Separating two transducer resonances · Dhruvil Patel</title>
 <meta name="description" content="How I separated two overlapping resonances in an underwater piezo transducer for the ARVP acoustic modem, by peeling one circuit branch off the other in MATLAB.">
 <meta name="theme-color" content="#f5f7f3">
 <link rel="preconnect" href="https://api.fontshare.com">
@@ -34,9 +34,9 @@
 </header>
 <main id="main">
 <div class="art-head">
-  <h1>Each answer needed the other</h1>
+  <h1>Separating two transducer resonances</h1>
   <div class="meta"><span>Build log · ARVP</span><span>October 2026</span><span>MATLAB · BVD modelling</span></div>
-  <p class="dek">Our underwater transducer has two resonances on top of each other. To measure the weak one I had to remove the strong one, but the strong one’s numbers were bent by the weak one. Here’s how I peeled them apart.</p>
+  <p class="dek">Our underwater transducer has two resonances that overlap, and each one distorts the measurement of the other. This is how I separated them in MATLAB to get an accurate circuit model.</p>
 </div>
 <article class="art">
 <h2>What I was modelling</h2>
@@ -50,18 +50,18 @@
   <span>C<sub>1</sub> = C<sub>0</sub> [ (<i>f</i><sub>p</sub>/<i>f</i><sub>s</sub>)² − 1 ],&nbsp;&nbsp; L<sub>1</sub> = 1 / (2π<i>f</i><sub>s</sub>)² C<sub>1</sub></span>
   <span class="why">B = Im(Y) is the susceptance. At f<sub>s</sub> the branch is purely resistive, so all of B there belongs to C0.</span>
 </div>
-<p>That gave C0 = 4.46 nF, R1 = 122 Ω and Q ≈ 6 for the main mode. The model fits the resonance well, but below about 60 kHz it sits far above the measurement: 18.0% RMS error over the sweep and up to 29% near 40 kHz. That’s exactly where our carrier band is, 45 to 65 kHz, so it mattered.</p>
+<p>That gave C0 = 4.46 nF, R1 = 122 Ω and Q ≈ 6 for the main mode. The model fits the resonance well, but below about 60 kHz it sits far above the measurement: 18.0% RMS error over the sweep and up to 29% near 40 kHz. That’s where our carrier band is, 45 to 65 kHz.</p>
 <figure>
   <div class="panel"><img src="../img/t1-bvd-fit.png" width="1350" height="1575" loading="lazy" alt="Three stacked plots from 20 to 200 kHz for Transducer 1: impedance magnitude, phase and model error. Measured is a solid line, the one-branch model blue dots, the two-branch model red dots. The one-branch error is 25 to 29 percent below 45 kHz; the two-branch error stays within a few percent."></div>
   <figcaption>The figure my script draws. Black is measured, blue is one branch, red is two branches after peeling. The phase plot shows it best: one branch sits flat near −90°, the real transducer doesn’t.</figcaption>
 </figure>
 
-<h2>The catch</h2>
+<h2>Why the second branch is hard to measure</h2>
 <p>The extra error is a second, weaker vibration mode. Transducers with more than one resonance need one R–L–C branch per mode. To find the second branch, the obvious move is to subtract C0 and branch 1 from the measured admittance and look at what’s left.</p>
-<p>The problem is that C0 and R1 were read at 151.7 kHz, and the second branch is still contributing a little conductance and susceptance there. So C0 and branch 1 are slightly wrong until branch 2 is known, and branch 2 can’t be measured until C0 and branch 1 are right. Each one needs the other first.</p>
+<p>The problem is that C0 and R1 were read at 151.7 kHz, and the second branch is still contributing a little conductance and susceptance there. So C0 and branch 1 are slightly wrong until branch 2 is known, and branch 2 can’t be measured until C0 and branch 1 are right.</p>
 
-<h2>Peeling, twice</h2>
-<p>The way around it is to guess, then correct. My script runs the same loop two times.</p>
+<h2>Separating them in two passes</h2>
+<p>My script estimates both, corrects them, and then runs the same steps a second time.</p>
 <ol>
   <li><b>Subtract what you have.</b> Using the current C0 and branch 1, compute what’s left over:
     <div class="eq"><span>Y<sub>left</sub> = Y − <i>j</i>ωC<sub>0</sub> − 1 / Z<sub>1</sub></span><span class="why">Z<sub>1</sub> = R<sub>1</sub> + <i>j</i>ωL<sub>1</sub> + 1/<i>j</i>ωC<sub>1</sub>, the branch 1 impedance at every frequency.</span></div></li>
@@ -88,7 +88,7 @@
   </tbody>
 </table>
 <p>The RMS error over the whole sweep went from 18.0% to 3.0%, and inside the 45–65 kHz carrier band from 17.2% to 1.1%. Afterwards I added a least-squares refinement with MATLAB’s fminsearch, a Nelder–Mead search, started from the peeled values. It brought the overall error to 1.7%, and it was needed on Transducer 2, where the coarse sweep grid had missed the true peak.</p>
-<p>The second mode is broad, with a Q near 1, and it sits right on our carrier band. That’s useful: it means the transducer can cover 45–65 kHz without smearing bits, and the model now gives the transmit driver the right load there.</p>
+<p>The second mode is broad, with a Q near 1, and it sits on our carrier band. Because of that, the transducer can cover 45–65 kHz without smearing bits, and the model gives the transmit driver the right load there.</p>
 
 <h2>Checking it in the pool</h2>
 <p>The model says the band around 45–65 kHz is usable. The same day we ran a gated-pulse sweep from 30 to 80 kHz at 20, 40 and 46 inches. The detections cluster between about 40 and 70 kHz, which agrees, though we’re still validating this data before using it for decisions.</p>
