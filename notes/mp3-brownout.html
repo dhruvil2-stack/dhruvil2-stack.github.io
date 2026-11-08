@@ -64,10 +64,14 @@
 <p>So for the same burst, more capacitance means a smaller dip. I’d used 22 µF, which is a pretty standard value, and for the quieter cases it was fine.</p>
 <h2>What I changed</h2>
 <p>I swapped the 22 µF bulk capacitor for a 100 µF one. With almost five times the capacitance, the same burst should cause roughly a fifth of the dip, and after the change the skipping test passed.</p>
-<div class="callout">The “standard” value was a starting point, not a decision. Testing the busiest case on purpose is what showed it wasn’t enough.</div>
 <h2>What still isn’t solved</h2>
-<p>Later I built a tool called RailCheck, which lets me run the same rail tests on the real board more systematically. Every case passed except one: playing at maximum volume while skipping back and forth quickly. That’s the hardest load the player sees, and it still dips. So the bigger capacitor helped, but it isn’t the whole fix.</p>
-<p>That’s feeding into the second version of the board. I’m keeping linear regulators (LDOs) rather than switching to a buck converter, because a buck converter’s switching noise can end up in the audio. I’m also moving to an ESP32-S3 module and making the whole player thinner. The power path is one of the main things I’m redesigning.</p>
+<p>I later built a tool called RailCheck that runs the same rail tests automatically on the real board. Every test passed except one: playing at full volume while skipping songs back and forth quickly. That’s the heaviest load the player sees, and the rail still dips there. The bigger capacitor helped, but it didn’t fully fix the problem.</p>
+<p>I’m fixing the power design properly in the second version of the board. A few decisions so far:</p>
+<ul>
+  <li>Keep linear regulators (LDOs) for the supply. A switching regulator (a buck converter) would use less battery, but it constantly switches on and off, and that electrical noise can leak into the audio. LDOs give a cleaner supply.</li>
+  <li>Move to an ESP32-S3 module.</li>
+  <li>Make the player thinner.</li>
+</ul>
 <figure class="narrow">
   <div class="panel"><img src="../img/mp3-pcb-top.png" width="460" height="658" loading="lazy" alt="Top side of the MP3 player PCB, rendered from the Gerber files."></div>
   <figcaption>Top side of the board, rendered from my Gerber files. The analog section sits above the dividing line, the digital section below.</figcaption>
@@ -76,12 +80,6 @@
   <a class="btn" href="https://drive.google.com/file/d/1-BPB9EZshVwInmu3_R_qBqkqG8TPMAxt/view?usp=sharing"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"></use></svg>Watch the player in use</a>
   <a class="btn quiet" href="https://github.com/dhruvil2-stack/MP3-Player">Code and board files<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-out"></use></svg></a>
 </div>
-<h2>Further reading</h2>
-<ul class="refs">
-  <li>H. Johnson and M. Graham, <i>High-Speed Digital Design: A Handbook of Black Magic</i>, Prentice Hall, 1993, ch. 8 (power systems and bypass capacitance).</li>
-  <li>Diodes Inc., <i>AP2112: 600 mA CMOS LDO Regulator with Enable</i>, datasheet (load-transient response and output capacitor guidance).</li>
-  <li>Espressif Systems, <i>ESP32 Technical Reference Manual</i>, brownout detector section.</li>
-</ul>
 </article>
 </main>
 <footer class="art-foot">

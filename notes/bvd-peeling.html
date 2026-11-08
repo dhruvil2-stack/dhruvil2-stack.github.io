@@ -41,7 +41,7 @@
 <article class="art">
 <h2>What I was modelling</h2>
 <p>The ARVP RoboSub team is building an FSK acoustic modem from potted piezoelectric transducers. To design the transmit driver in LTspice we need a circuit that behaves like the transducer, so the simulation sees the right load.</p>
-<p>On October 17 we swept the impedance of each transducer underwater from 20 to 200 kHz, three times each, and I averaged the runs point by point. The standard circuit for this is the Butterworth–Van Dyke (BVD) model: a capacitor C0 for the ceramic itself, in parallel with a series R–L–C branch that stands in for the mechanical vibration (Van Dyke, 1928; IEEE Std 176-1987).</p>
+<p>On October 17 we swept the impedance of each transducer underwater from 20 to 200 kHz, three times each, and I averaged the runs point by point. The standard circuit for this is the Butterworth–Van Dyke (BVD) model: a capacitor C0 for the ceramic itself, in parallel with a series R–L–C branch that stands in for the mechanical vibration.</p>
 
 <h2>One branch wasn’t enough</h2>
 <p>The single-branch values come straight off the sweep. In admittance, Y = 1/Z, parallel parts simply add, so I worked there. The conductance G = Re(Y) peaks at the series resonance, f<sub>s</sub> = 151.7 kHz, and at that frequency L and C cancel, leaving only R. The resistance R<sub>s</sub> peaks at the anti-resonance, f<sub>p</sub> = 174.2 kHz.</p>
@@ -57,7 +57,7 @@
 </figure>
 
 <h2>The catch</h2>
-<p>The extra error is a second, weaker vibration mode. Transducers with more than one resonance need one R–L–C branch per mode (Sherman and Butler, 2007, ch. 13). To find the second branch, the obvious move is to subtract C0 and branch 1 from the measured admittance and look at what’s left.</p>
+<p>The extra error is a second, weaker vibration mode. Transducers with more than one resonance need one R–L–C branch per mode. To find the second branch, the obvious move is to subtract C0 and branch 1 from the measured admittance and look at what’s left.</p>
 <p>The problem is that C0 and R1 were read at 151.7 kHz, and the second branch is still contributing a little conductance and susceptance there. So C0 and branch 1 are slightly wrong until branch 2 is known, and branch 2 can’t be measured until C0 and branch 1 are right. Each one needs the other first.</p>
 
 <h2>Peeling, twice</h2>
@@ -87,8 +87,8 @@
     <tr><td>Branch 2, second mode</td><td class="n">1816 Ω</td><td class="n">4.75 mH</td><td class="n">1.27 nF</td><td class="n">64.7 kHz, Q ≈ 1.06</td></tr>
   </tbody>
 </table>
-<p>The RMS error over the whole sweep went from 18.0% to 3.0%, and inside the 45–65 kHz carrier band from 17.2% to 1.1%. Afterwards I added a least-squares refinement with MATLAB’s fminsearch, a Nelder–Mead search (Lagarias et al., 1998), started from the peeled values. It brought the overall error to 1.7%, and it was needed on Transducer 2, where the coarse sweep grid had missed the true peak.</p>
-<div class="callout">The second mode is broad, with a Q near 1, and it sits right on our carrier band. That’s useful: it means the transducer can cover 45–65 kHz without smearing bits, and the model now gives the transmit driver the right load there.</div>
+<p>The RMS error over the whole sweep went from 18.0% to 3.0%, and inside the 45–65 kHz carrier band from 17.2% to 1.1%. Afterwards I added a least-squares refinement with MATLAB’s fminsearch, a Nelder–Mead search, started from the peeled values. It brought the overall error to 1.7%, and it was needed on Transducer 2, where the coarse sweep grid had missed the true peak.</p>
+<p>The second mode is broad, with a Q near 1, and it sits right on our carrier band. That’s useful: it means the transducer can cover 45–65 kHz without smearing bits, and the model now gives the transmit driver the right load there.</p>
 
 <h2>Checking it in the pool</h2>
 <p>The model says the band around 45–65 kHz is usable. The same day we ran a gated-pulse sweep from 30 to 80 kHz at 20, 40 and 46 inches. The detections cluster between about 40 and 70 kHz, which agrees, though we’re still validating this data before using it for decisions.</p>
@@ -99,13 +99,6 @@
 
 <div class="links"><a class="btn" href="../projects/acoustic-modem.html">More on the modem project<svg class="i i-r" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a><a class="btn quiet" href="../#log">Back to the build log</a></div>
 
-<h2>References</h2>
-<ul class="refs">
-  <li>K. S. Van Dyke, “The piezo-electric resonator and its equivalent network,” <i>Proceedings of the IRE</i>, vol. 16, no. 6, pp. 742–764, 1928.</li>
-  <li><i>IEEE Standard on Piezoelectricity</i>, ANSI/IEEE Std 176-1987.</li>
-  <li>C. H. Sherman and J. L. Butler, <i>Transducers and Arrays for Underwater Sound</i>, Springer, 2007.</li>
-  <li>J. C. Lagarias, J. A. Reeds, M. H. Wright and P. E. Wright, “Convergence properties of the Nelder–Mead simplex method in low dimensions,” <i>SIAM Journal on Optimization</i>, vol. 9, no. 1, pp. 112–147, 1998.</li>
-</ul>
 </article>
 </main>
 <footer class="art-foot">

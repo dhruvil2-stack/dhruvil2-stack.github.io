@@ -277,9 +277,7 @@ p { margin: 0; text-wrap: pretty; }
 .art td { padding: var(--s-3) var(--s-4); vertical-align: top; }
 .art tr:nth-child(even) td { background: var(--paper); }
 .art td.n { white-space: nowrap; }
-.art .callout { background: var(--lake); color: var(--lake-ink); border-radius: var(--r-md); padding: var(--s-5) var(--s-5); margin: var(--s-6) 0; }
 .art .links { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-7); }
-.art .refs { font-size: var(--fs-small); color: var(--ink-2); }
 .art pre { font-family: var(--mono); font-size: 0.95rem; line-height: 1.6; background: var(--paper-2); border-radius: var(--r-md); padding: var(--s-4) var(--s-5); overflow-x: auto; margin: var(--s-5) 0; }
 .art pre .del { color: var(--danger); }
 .art pre .c { color: var(--ink-2); }
