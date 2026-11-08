@@ -1,36 +1,96 @@
-// Gentle fade-in, plus a zoomable image viewer.
-// Everything stays usable if this file fails to load.
+// Loading states, the inline video, copy-email feedback, the active section in the nav,
+// and a zoomable image viewer. The page stays fully usable if this file fails to load:
+// images show normally, the video button is a plain link to Google Drive, and the email is a mailto link.
 (function () {
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var doc = document.documentElement;
+  doc.classList.add('js');
 
-  // ---------- Fade-in ----------
-  if (!reduce && 'IntersectionObserver' in window) {
-    document.documentElement.classList.add('js');
-    var els = document.querySelectorAll('.sec-head, .proj, .small-projects > div, .log li, .role, .skills, .art figure');
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-      });
-    }, { rootMargin: '0px 0px -6% 0px' });
-    els.forEach(function (el) { el.classList.add('rise'); io.observe(el); });
+  function icon(name) {
+    return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-' + name + '"></use></svg>';
   }
 
-  // ---------- Image viewer (same behaviour as the original site's lightbox) ----------
-  var imgs = document.querySelectorAll('.proj .pic img, .art figure img');
+  // ---------- Image loading state: shimmer until the picture arrives, a message if it fails ----------
+  document.querySelectorAll('.panel > img').forEach(function (img) {
+    var box = img.parentElement;
+    box.classList.add('loadable');
+    function done() { box.classList.add('loaded'); }
+    function fail() { box.classList.add('failed'); }
+    if (img.complete) { img.naturalWidth ? done() : fail(); }
+    else { img.addEventListener('load', done); img.addEventListener('error', fail); }
+  });
+
+  // ---------- Inline video: the button is a link to Drive until clicked ----------
+  document.querySelectorAll('[data-video]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var box = document.createElement('div');
+      box.className = a.className;
+      box.setAttribute('aria-busy', 'true');
+      box.innerHTML = '<div class="loading-note" role="status"><span class="spinner"></span><span>Loading the video…</span></div>';
+      var f = document.createElement('iframe');
+      f.src = a.getAttribute('data-video');
+      f.title = a.getAttribute('aria-label') || 'Video';
+      f.allow = 'autoplay; fullscreen';
+      f.setAttribute('allowfullscreen', '');
+      f.style.opacity = '0';
+      f.addEventListener('load', function () {
+        f.style.transition = 'opacity 300ms ease'; f.style.opacity = '1';
+        box.removeAttribute('aria-busy');
+        var n = box.querySelector('.loading-note'); if (n) setTimeout(function () { n.remove(); }, 320);
+      });
+      box.appendChild(f);
+      a.replaceWith(box);
+      f.focus();
+    });
+  });
+
+  // ---------- Copy email, with visible confirmation ----------
+  document.querySelectorAll('[data-copy]').forEach(function (b) {
+    var live = b.querySelector('.sr');
+    b.addEventListener('click', function () {
+      var text = b.getAttribute('data-copy');
+      function ok() {
+        b.classList.add('done');
+        if (live) live.textContent = 'Email copied';
+        clearTimeout(b._t);
+        b._t = setTimeout(function () { b.classList.remove('done'); if (live) live.textContent = ''; }, 2000);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(ok, function () { window.location.href = 'mailto:' + text; });
+      } else { window.location.href = 'mailto:' + text; }
+    });
+  });
+
+  // ---------- Active section in the top bar ----------
+  var navLinks = document.querySelectorAll('.bar nav a[href^="#"]');
+  if (navLinks.length && 'IntersectionObserver' in window) {
+    var map = {};
+    navLinks.forEach(function (l) { var s = document.querySelector(l.getAttribute('href')); if (s) map[s.id] = l; });
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var l = map[e.target.id]; if (!l) return;
+        if (e.isIntersecting) { navLinks.forEach(function (x) { x.removeAttribute('aria-current'); }); l.setAttribute('aria-current', 'true'); }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    Object.keys(map).forEach(function (id) { spy.observe(document.getElementById(id)); });
+  }
+
+  // ---------- Image viewer ----------
+  var imgs = document.querySelectorAll('.art figure .panel > img');
   if (!imgs.length) return;
 
   var lb = document.createElement('dialog');
   lb.id = 'lb';
   lb.setAttribute('aria-label', 'Image viewer');
   lb.innerHTML =
-    '<div class="lb-bar"><span class="lb-cap" id="lb-cap"></span><button class="lb-close" id="lb-close" type="button" aria-label="Close image">&#x2715;</button></div>' +
-    '<div class="lb-in" id="lb-in"><img id="lb-img" alt="" draggable="false"></div>' +
+    '<div class="lb-bar"><span class="lb-cap" id="lb-cap"></span><button class="lb-close" id="lb-close" type="button" aria-label="Close image">' + icon('close') + '</button></div>' +
+    '<div class="lb-in" id="lb-in"><img id="lb-img" alt="" draggable="false"><div class="lb-spin" role="status"><span class="spinner"></span><span>Loading full size…</span></div></div>' +
     '<div class="lb-tools">' +
-      '<button type="button" id="lb-out" aria-label="Zoom out">&minus;</button>' +
-      '<span class="pct" id="lb-pct">100%</span>' +
-      '<button type="button" id="lb-inb" aria-label="Zoom in">+</button>' +
-      '<button type="button" id="lb-fit" aria-label="Reset view">&#x27F2;</button>' +
-      '<span class="lb-help">Scroll or pinch to zoom · double-click to zoom · drag to move</span>' +
+      '<button type="button" id="lb-out" aria-label="Zoom out">' + icon('minus') + '</button>' +
+      '<span class="pct" id="lb-pct" aria-live="polite">100%</span>' +
+      '<button type="button" id="lb-inb" aria-label="Zoom in">' + icon('plus') + '</button>' +
+      '<button type="button" id="lb-fit" aria-label="Fit to screen">' + icon('fit') + '</button>' +
+      '<span class="lb-help">Scroll or pinch to zoom, drag to move</span>' +
     '</div>';
   document.body.appendChild(lb);
 
@@ -51,12 +111,14 @@
   function zoomAt(cx, cy, ns) { ns = Math.min(MAX, Math.max(1, ns)); TX = cx - (cx - TX) * (ns / S); TY = cy - (cy - TY) * (ns / S); S = ns; clampPan(); apply(); }
   function centre() { return [st.clientWidth / 2, st.clientHeight / 2]; }
   function open(im) {
-    li.onload = fit; li.src = im.currentSrc || im.src; li.alt = im.alt;
+    lb.classList.add('is-loading');
+    li.onload = function () { lb.classList.remove('is-loading'); fit(); };
+    li.src = im.currentSrc || im.src; li.alt = im.alt;
     li.className = im.closest('.dark') ? 'dark' : '';
     var fig = im.closest('figure'), cap = fig && fig.querySelector('figcaption');
     lc.textContent = cap ? cap.textContent : (im.alt || '');
     if (lb.showModal) { lb.showModal(); } else { lb.setAttribute('open', ''); }
-    if (li.complete && li.naturalWidth) fit();
+    if (li.complete && li.naturalWidth) { lb.classList.remove('is-loading'); fit(); }
   }
   imgs.forEach(function (im) {
     im.classList.add('zoomable');

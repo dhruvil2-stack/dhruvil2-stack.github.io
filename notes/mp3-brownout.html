@@ -9,23 +9,37 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambarino@400&f[]=general-sans@400,500&display=swap">
-<link rel="stylesheet" href="../site.css?v=3">
-<script src="../site.js?v=3" defer></script>
+<link rel="stylesheet" href="../site.css?v=4">
+<script src="../site.js?v=4" defer></script>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8.5 5.8v12.4a.8.8 0 0 0 1.2.7l10-6.2a.8.8 0 0 0 0-1.4l-10-6.2a.8.8 0 0 0-1.2.7z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.8 7 8.2 6 8.2-6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M15 9V6.5A2.5 2.5 0 0 0 12.5 4h-6A2.5 2.5 0 0 0 4 6.5v6A2.5 2.5 0 0 0 6.5 15H9"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-fit" viewBox="0 0 24 24"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></symbol>
+</svg>
 <a class="skip" href="#main">Skip to content</a>
 <header class="page-top">
   <a class="mark" href="../">Dhruvil Patel</a>
-  <nav aria-label="Site"><a href="../#log">Build log</a><a href="../#work">Projects</a><a href="mailto:dhruvil2@ualberta.ca">Email</a></nav>
+  <nav aria-label="Site"><a href="../#projects">Projects</a><a href="../#log">Build log</a><a href="mailto:dhruvil2@ualberta.ca">Email me</a></nav>
 </header>
 <main id="main">
-<div class="art-head" data-rise>
+<div class="art-head">
   <h1>Why my MP3 player kept resetting</h1>
   <div class="meta"><span>Build log · MP3 player</span><span>October 2026</span><span>ESP32 · Power · Analog Discovery 2 · Python</span></div>
   <p class="dek">My homemade music player rebooted itself whenever I skipped songs. Here’s how I narrowed it down to a dip on the power rail, what I changed, and what still isn’t fixed.</p>
 </div>
 <article class="art">
-<h2>The project</h2>
+<h2>The player</h2>
 <p>The player is a personal project: a fully offline music player on a 4-layer board I designed in Altium. An ESP32 reads songs from an SD card and streams them to a VS1053B audio decoder, and a small ST7735 screen shows what’s playing. It runs from a 1000 mAh LiPo and lives in a snap-fit case I printed. Once it worked I used it every day, and it got about 17 hours per charge.</p>
 <h2>The symptom</h2>
 <p>Every so often the player would reset and boot back up in the middle of a song. A random reset like that often points to the power supply, so before changing anything I wanted actual numbers.</p>
@@ -54,13 +68,13 @@
 <h2>What still isn’t solved</h2>
 <p>Later I built a tool called RailCheck, which lets me run the same rail tests on the real board more systematically. Every case passed except one: playing at maximum volume while skipping back and forth quickly. That’s the hardest load the player sees, and it still dips. So the bigger capacitor helped, but it isn’t the whole fix.</p>
 <p>That’s feeding into the second version of the board. I’m keeping linear regulators (LDOs) rather than switching to a buck converter, because a buck converter’s switching noise can end up in the audio. I’m also moving to an ESP32-S3 module and making the whole player thinner. The power path is one of the main things I’m redesigning.</p>
-<figure>
-  <img src="../img/mp3-pcb-top.png" width="460" height="658" loading="lazy" alt="Top side of the MP3 player PCB, rendered from the Gerber files." style="max-width:420px">
+<figure class="narrow">
+  <div class="panel"><img src="../img/mp3-pcb-top.png" width="460" height="658" loading="lazy" alt="Top side of the MP3 player PCB, rendered from the Gerber files."></div>
   <figcaption>Top side of the board, rendered from my Gerber files. The analog section sits above the dividing line, the digital section below.</figcaption>
 </figure>
 <div class="links">
-  <a class="btn" href="https://drive.google.com/file/d/1-BPB9EZshVwInmu3_R_qBqkqG8TPMAxt/view?usp=sharing">Watch the player in use</a>
-  <a class="btn quiet" href="https://github.com/dhruvil2-stack/MP3-Player">Code and board files</a>
+  <a class="btn" href="https://drive.google.com/file/d/1-BPB9EZshVwInmu3_R_qBqkqG8TPMAxt/view?usp=sharing"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"></use></svg>Watch the player in use</a>
+  <a class="btn quiet" href="https://github.com/dhruvil2-stack/MP3-Player">Code and board files<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-out"></use></svg></a>
 </div>
 <h2>Further reading</h2>
 <ul class="refs">
@@ -71,8 +85,7 @@
 </article>
 </main>
 <footer class="art-foot">
-  <p class="lbl">Next</p>
-  <a class="next" href="../projects/mp3-player.html">The MP3 player project</a>
+  <a class="next" href="../projects/mp3-player.html">The MP3 player project<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a>
   <div class="legal"><span>© 2026 Dhruvil Patel · <a href="mailto:dhruvil2@ualberta.ca">dhruvil2@ualberta.ca</a></span><a href="../">Home</a></div>
 </footer>
 </body>

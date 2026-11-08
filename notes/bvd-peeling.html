@@ -9,17 +9,31 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambarino@400&f[]=general-sans@400,500&display=swap">
-<link rel="stylesheet" href="../site.css?v=3">
-<script src="../site.js?v=3" defer></script>
+<link rel="stylesheet" href="../site.css?v=4">
+<script src="../site.js?v=4" defer></script>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8.5 5.8v12.4a.8.8 0 0 0 1.2.7l10-6.2a.8.8 0 0 0 0-1.4l-10-6.2a.8.8 0 0 0-1.2.7z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.8 7 8.2 6 8.2-6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M15 9V6.5A2.5 2.5 0 0 0 12.5 4h-6A2.5 2.5 0 0 0 4 6.5v6A2.5 2.5 0 0 0 6.5 15H9"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-fit" viewBox="0 0 24 24"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></symbol>
+</svg>
 <a class="skip" href="#main">Skip to content</a>
 <header class="page-top">
   <a class="mark" href="../">Dhruvil Patel</a>
-  <nav aria-label="Site"><a href="../#log">Build log</a><a href="../#work">Projects</a><a href="mailto:dhruvil2@ualberta.ca">Email</a></nav>
+  <nav aria-label="Site"><a href="../#projects">Projects</a><a href="../#log">Build log</a><a href="mailto:dhruvil2@ualberta.ca">Email me</a></nav>
 </header>
 <main id="main">
-<div class="art-head" data-rise>
+<div class="art-head">
   <h1>Each answer needed the other</h1>
   <div class="meta"><span>Build log · ARVP</span><span>October 2026</span><span>MATLAB · BVD modelling</span></div>
   <p class="dek">Our underwater transducer has two resonances on top of each other. To measure the weak one I had to remove the strong one, but the strong one’s numbers were bent by the weak one. Here’s how I peeled them apart.</p>
@@ -38,7 +52,7 @@
 </div>
 <p>That gave C0 = 4.46 nF, R1 = 122 Ω and Q ≈ 6 for the main mode. The model fits the resonance well, but below about 60 kHz it sits far above the measurement: 18.0% RMS error over the sweep and up to 29% near 40 kHz. That’s exactly where our carrier band is, 45 to 65 kHz, so it mattered.</p>
 <figure>
-  <img src="../img/t1-bvd-fit.png" width="1350" height="1575" loading="lazy" alt="Three stacked plots from 20 to 200 kHz for Transducer 1: impedance magnitude, phase and model error. Measured is a solid line, the one-branch model blue dots, the two-branch model red dots. The one-branch error is 25 to 29 percent below 45 kHz; the two-branch error stays within a few percent.">
+  <div class="panel"><img src="../img/t1-bvd-fit.png" width="1350" height="1575" loading="lazy" alt="Three stacked plots from 20 to 200 kHz for Transducer 1: impedance magnitude, phase and model error. Measured is a solid line, the one-branch model blue dots, the two-branch model red dots. The one-branch error is 25 to 29 percent below 45 kHz; the two-branch error stays within a few percent."></div>
   <figcaption>The figure my script draws. Black is measured, blue is one branch, red is two branches after peeling. The phase plot shows it best: one branch sits flat near −90°, the real transducer doesn’t.</figcaption>
 </figure>
 
@@ -59,7 +73,7 @@
     then recompute C1 and L1 with the new C0. On the second pass the loop starts from these corrected values.</li>
 </ol>
 <figure>
-  <img src="../img/t1-peel-residual.png" width="1350" height="690" loading="lazy" alt="Leftover conductance after subtracting C0 and branch 1, 20 to 130 kHz. Both passes show a broad hump peaking near 64.7 kHz. Above 100 kHz the first pass rises steeply while the second pass stays lower.">
+  <div class="panel"><img src="../img/t1-peel-residual.png" width="1350" height="690" loading="lazy" alt="Leftover conductance after subtracting C0 and branch 1, 20 to 130 kHz. Both passes show a broad hump peaking near 64.7 kHz. Above 100 kHz the first pass rises steeply while the second pass stays lower."></div>
   <figcaption>The leftover after subtracting C0 and branch 1. Pass 1 rises again above 100 kHz because C0 was too small. With the corrected values, pass 2 doesn’t.</figcaption>
 </figure>
 <p>Two passes were enough: the second barely moved the numbers. The correction took C0 from 4.46 to 4.69 nF and R1 from 121.7 to 123.4 Ω.</p>
@@ -79,11 +93,11 @@
 <h2>Checking it in the pool</h2>
 <p>The model says the band around 45–65 kHz is usable. The same day we ran a gated-pulse sweep from 30 to 80 kHz at 20, 40 and 46 inches. The detections cluster between about 40 and 70 kHz, which agrees, though we’re still validating this data before using it for decisions.</p>
 <figure>
-  <img src="../img/pool-burst-scatter.png" width="1030" height="731" loading="lazy" alt="Scatter of detected spectral peak frequency against FFT peak magnitude for bursts at 20, 40 and 46 inches; most detections fall between 40 and 70 kHz.">
+  <div class="panel"><img src="../img/pool-burst-scatter.png" width="1030" height="731" loading="lazy" alt="Scatter of detected spectral peak frequency against FFT peak magnitude for bursts at 20, 40 and 46 inches; most detections fall between 40 and 70 kHz."></div>
   <figcaption>Preliminary burst detections, October 17 sweep. Blue 20 in, red 40 in, green 46 in.</figcaption>
 </figure>
 
-<div class="links"><a class="btn" href="../projects/acoustic-modem.html">More on the modem project</a><a class="btn quiet" href="../#log">Back to the build log</a></div>
+<div class="links"><a class="btn" href="../projects/acoustic-modem.html">More on the modem project<svg class="i i-r" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a><a class="btn quiet" href="../#log">Back to the build log</a></div>
 
 <h2>References</h2>
 <ul class="refs">
@@ -95,8 +109,7 @@
 </article>
 </main>
 <footer class="art-foot">
-  <p class="lbl">Next</p>
-  <a class="next" href="../notes/mp3-brownout.html">Why my MP3 player kept resetting</a>
+  <a class="next" href="../notes/mp3-brownout.html">Why my MP3 player kept resetting<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a>
   <div class="legal"><span>© 2026 Dhruvil Patel · <a href="mailto:dhruvil2@ualberta.ca">dhruvil2@ualberta.ca</a></span><a href="../">Home</a></div>
 </footer>
 </body>
