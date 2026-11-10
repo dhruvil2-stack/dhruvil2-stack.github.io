@@ -189,6 +189,8 @@ p { margin: 0; text-wrap: pretty; }
 .small-projects { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); margin-top: var(--s-8); }
 .small-projects > div { background: var(--paper-2); border-radius: var(--r-md); padding: var(--s-5) var(--s-5) var(--s-6); }
 .small-projects h3 { font-size: var(--fs-body); }
+.small-projects > div:only-child { grid-column: 1 / -1; }
+.small-projects > div:only-child p { max-width: 70ch; }
 .small-projects .where { margin: var(--s-1) 0 var(--s-3); }
 
 /* ---------- Build log ---------- */
