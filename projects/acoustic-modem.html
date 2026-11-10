@@ -57,14 +57,18 @@
 <h2>Circuit models of the transducers</h2>
 <p>Recorded underwater impedance sweeps of both potted transducers and fitted Butterworth–Van Dyke (BVD) circuit models. A single branch missed Transducer 1 by 18% RMS; peeling out a second branch near 65 kHz brought it to 3.0%, and a least-squares refinement to 1.7%. <a href="../notes/bvd-peeling.html">How the peeling works</a>.</p>
 <figure>
-  <div class="panel"><img src="../img/bvd-both.png" width="1200" height="690" loading="lazy" alt="Underwater impedance magnitude from 20 to 200 kHz for two transducers: two-branch BVD model curves with measured minimum near 147 kHz and maximum near 180 kHz."></div>
-  <figcaption>Two-branch BVD model of both transducers underwater, plotted from my fitted values. Open circles are the measured impedance minimum and maximum.</figcaption>
+  <div class="panel"><img src="../img/matlab-bvd-fit.png" width="1660" height="981" loading="lazy" alt="MATLAB figure with three plots from 20 to 200 kHz: impedance magnitude, impedance phase and model error. The two-branch model follows the measured curve closely, while the one-branch model is up to about 29 percent off below 60 kHz."></div>
+  <figcaption>The figure from my MATLAB script. Black is the measured impedance (average of 3 runs), blue is the one-branch model and orange is the two-branch model. The bottom plot is each model’s error against the measurement.</figcaption>
 </figure>
 <h2>Pool testing</h2>
 <p>Helped run pool testing at NREF: impedance, Tx/Rx sensitivity and reciprocity, ring-down, and chirp matched-filter channel sounding. At 5 V drive the average SNR went from about 41 dB at 0 inches to 14.5–17 dB at 16 inches (41 cm), with the Analog Discovery’s own noise floor as the limit.</p>
 <figure>
-  <div class="panel"><img src="../img/snr-distance.png" width="1200" height="660" loading="lazy" alt="Average SNR of the 65 kHz tone versus separation, two runs: about 41 dB at 0 inches, 25 to 28 dB at 8 inches, 19 to 24 dB at 12 inches, and 14.5 to 17 dB at 16 inches, all above a 10 dB reference line."></div>
-  <figcaption>Average SNR from the October 3 pool test, two recordings at each separation. The link stayed above 10 dB out to 16 inches, though the far runs had short dropouts from echoes.</figcaption>
+  <div class="panel"><img src="../img/matlab-snr-distance.png" width="1668" height="992" loading="lazy" alt="MATLAB plot of SNR of the 65 kHz tone against distance from 0 to 16 tiles at 5 V drive. The 10-second average falls from about 41 dB at 0 tiles to about 15 to 17 dB at 16 tiles. The worst readings drop below the 10 dB line from 12 tiles onward."></div>
+  <figcaption>SNR against distance from the October 3 pool test, two recordings at each distance. One pool tile is 1 inch. Blue dots are the 10-second average and orange triangles are the worst single reading.</figcaption>
+</figure>
+<figure>
+  <div class="panel"><img src="../img/matlab-snr-time.png" width="1651" height="976" loading="lazy" alt="MATLAB plot of SNR over 10 seconds in 100 ms windows at 0, 8, 14 and 16 tiles. The 0 and 8 tile recordings stay steady near 41 and 28 dB. The 14 and 16 tile recordings sit around 15 to 20 dB and dip sharply at times, especially after 8 seconds."></div>
+  <figcaption>SNR over time for four of the recordings. Up close the signal is steady. At 14 and 16 tiles it drops out for short moments, which is why the worst readings above are so much lower than the averages.</figcaption>
 </figure>
 <h2 id="match">Matching the transducer to the driver</h2>
 <p>At 55&nbsp;kHz the transducer doesn’t look like a resistor. From the measured sweep it’s about 88&nbsp;Ω in series with −j400&nbsp;Ω, so it behaves mostly like a capacitor, and a 6&nbsp;V drive only pushes about 10&nbsp;mW into it.</p>
