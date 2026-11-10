@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambarino@400&f[]=general-sans@400,500&display=swap">
-<link rel="stylesheet" href="../site.css?v=4">
-<script src="../site.js?v=4" defer></script>
+<link rel="stylesheet" href="../site.css?v=5">
+<script src="../site.js?v=5" defer></script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -30,7 +30,7 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="page-top">
   <a class="mark" href="../">Dhruvil Patel</a>
-  <nav aria-label="Site"><a href="../#projects">Projects</a><a href="../#log">Build log</a><a href="mailto:dhruvil2@ualberta.ca">Email me</a></nav>
+  <nav aria-label="Site"><a href="../#projects">Projects</a><a href="../#experience">Experience</a><a href="mailto:dhruvil2@ualberta.ca">Email me</a></nav>
 </header>
 <main id="main">
 <div class="art-head">
@@ -40,16 +40,6 @@
 </div>
 <article class="art">
 <dl class="specs"><div><dt>Link range</dt><dd>~15 m</dd></div><div><dt>Resonance</dt><dd>~149 kHz, axial mode</dd></div><div><dt>Carrier</dt><dd>Near 55 kHz</dd></div><div><dt>Usable band</dt><dd>~45–60 kHz</dd></div><div><dt>Model fit</dt><dd>3% RMS, peeled; 1.7% refined</dd></div><div><dt>Modulation</dt><dd>Frequency-hopped FSK</dd></div><div><dt>Drive matching</dt><dd>Series 1.16 mH, ~21× power</dd></div></dl>
-<h2>Where the modem is now</h2>
-<ul class="stagelist">
-  <li>Transducer characterization <span>done</span></li>
-  <li>System requirements <span>done</span></li>
-  <li class="now">Hardware: Tx/Rx circuits <span>now</span></li>
-  <li>Channel modelling <span>next</span></li>
-  <li>PCB design <span>later</span></li>
-  <li>Firmware <span>later</span></li>
-  <li>System test <span>later</span></li>
-</ul>
 <h2 id="axial">Ringing at 149 kHz</h2>
 <p>Ran a 20–200 kHz sweep at 9 separations and processed it with MATLAB FFT peak-finding. The strongest response was near 149 kHz, not the 65 kHz radial mode on the spec sheet, and a hand calculation matched it to the transducers’ length (axial) mode.</p>
 <h2 id="second">A second resonance near 55 kHz</h2>
@@ -87,7 +77,7 @@
 </figure>
 <p>Without the inductor, the transducer takes power most easily at its own main resonance near 150&nbsp;kHz, which is outside our band. The inductor moves that peak down to the carrier. The trade-offs are that the transducer now sees about 27&nbsp;V, the amplifier has to supply about 67&nbsp;mA, and the gain is narrow, with the 45 and 65&nbsp;kHz band edges a few dB below the peak.</p>
 <p>For the part, I picked a Bourns SRR1260A-102K (1.0&nbsp;mH). On its own it puts the peak near 60&nbsp;kHz, so the team is deciding between adding about 150&nbsp;µH to stay at 55&nbsp;kHz or moving the carrier up to around 60&nbsp;kHz.</p>
-<h2>Now: the transmit chain</h2>
+<h2>The transmit chain</h2>
 <p>Built a 2-FSK modem simulation in MATLAB to estimate bit errors under noise.</p>
 <p>Now on the Tx chain, simulating the Tx and Rx circuits in LTspice around the OPA365 op-amp as the team moves into hardware prototypes. I also suggested reviewing the team’s older modem PCB design and carrying over any changes that would make a real difference.</p>
 <p>That older design drives the transducer with a class D amplifier. We found too much noise on the digital side, so the team is looking at adding a 6th-order Sallen–Key high-pass filter. I’ve built the upgraded receive filtering in LTspice, but we don’t have the hardware for it yet.</p>

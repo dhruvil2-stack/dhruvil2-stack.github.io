@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dhruvil Patel · Electrical engineering student</title>
-<meta name="description" content="Dhruvil Patel, third-year electrical engineering co-op student at the University of Alberta. Projects: an underwater acoustic modem, an MP3 player board, controls and Verilog.">
+<meta name="description" content="Dhruvil Patel, third-year electrical engineering student at the University of Alberta. Things I’ve built, the problems I ran into and how I fixed them.">
 <meta name="theme-color" content="#f5f7f3">
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambarino@400&f[]=general-sans@400,500&display=swap">
-<link rel="stylesheet" href="site.css?v=4">
-<script src="site.js?v=4" defer></script>
+<link rel="stylesheet" href="site.css?v=5">
+<script src="site.js?v=5" defer></script>
 </head>
 <body id="top">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -30,94 +30,106 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar">
   <a class="mark" href="./">Dhruvil Patel</a>
-  <nav aria-label="Sections"><a href="#projects">Projects</a><a href="#log">Build log</a><a href="#experience">Experience</a><a href="#contact">Contact</a></nav>
+  <nav aria-label="Sections"><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#contact">Contact</a></nav>
 </header>
 
 <main id="main">
 <section class="hero" aria-labelledby="intro-h">
   <div>
     <h1 id="intro-h">Dhruvil Patel</h1>
-    <p class="lead">Electrical engineering co-op student at the University&nbsp;of&nbsp;Alberta. I work on embedded systems, circuit design and testing, through team, course and personal&nbsp;projects.</p>
-    <div class="actions">
-      <a class="btn" href="mailto:dhruvil2@ualberta.ca"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-mail"></use></svg>Email me</a>
-      <a class="textlink" href="#projects">See my projects<svg class="i i-d" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-down"></use></svg></a>
-    </div>
-    <p class="status">Third year, B.Sc. Electrical Engineering (co-op), graduating April&nbsp;2029. Looking for a co-op from January or May&nbsp;2027.</p>
+    <p class="lead">I’m a third-year electrical engineering student at the University&nbsp;of&nbsp;Alberta. These are the things I’ve built, what went wrong along the way, and how I fixed&nbsp;it.</p>
+    <p class="hero-links"><a class="textlink" href="mailto:dhruvil2@ualberta.ca"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-mail"></use></svg>Email</a><a class="textlink" href="https://github.com/dhruvil2-stack">GitHub<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-out"></use></svg></a><a class="textlink" href="https://www.linkedin.com/in/dhruvil-patel-305774300/">LinkedIn<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-out"></use></svg></a></p>
   </div>
-
-  <figure class="feature panel">
-      <a class="media" href="https://drive.google.com/file/d/1-BPB9EZshVwInmu3_R_qBqkqG8TPMAxt/view?usp=sharing" data-video="https://drive.google.com/file/d/1-BPB9EZshVwInmu3_R_qBqkqG8TPMAxt/preview" aria-label="Play the video of my MP3 player running">
-        <img src="img/mp3-pcb-top.png" width="460" height="658" alt="Top side of my MP3 player circuit board, rendered from the Gerber files">
-        <span class="play"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"></use></svg>Watch it play music</span>
-      </a>
-      <figcaption><span>The MP3 player I designed and built.</span><a href="projects/mp3-player.html">How I built it<svg class="i i-r" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></figcaption>
-  </figure>
+  <nav class="toc" aria-label="Projects on this page">
+    <ul>
+      <li><a href="#modem"><span class="t">Underwater acoustic modem</span><span class="s">ARVP RoboSub team</span><svg class="i i-d" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-down"></use></svg></a></li>
+      <li><a href="#mp3"><span class="t">MP3 player</span><span class="s">Personal project</span><svg class="i i-d" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-down"></use></svg></a></li>
+      <li><a href="#beam"><span class="t">Ball and beam control system</span><span class="s">Course project</span><svg class="i i-d" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-down"></use></svg></a></li>
+      <li><a href="#pid"><span class="t">Verilog PID controller</span><span class="s">Personal project</span><svg class="i i-d" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-down"></use></svg></a></li>
+    </ul>
+  </nav>
 </section>
 
 <section class="projects" id="projects" aria-labelledby="projects-h">
   <div class="sec-head">
-    <h2 id="projects-h">Hardware I’ve built and&nbsp;tested</h2>
-    <p>Team, personal and course work. Each one has its own page with the measurements.</p>
+    <h2 id="projects-h">Projects</h2>
   </div>
-    <article class="proj lead-proj">
-      <a class="pic panel" href="projects/acoustic-modem.html" tabindex="-1" aria-hidden="true"><img src="img/bvd-both.png" width="1200" height="690" loading="lazy" alt="Two-branch BVD impedance model of both transducers underwater, 20 to 200 kHz"></a>
+  <article class="proj" id="modem">
+    <div class="top">
+      <a class="pic panel" href="projects/acoustic-modem.html" tabindex="-1" aria-hidden="true"><img src="img/bvd-both.png" width="1200" height="690" alt="Impedance of both transducers underwater from 20 to 200 kHz, measured points against my circuit model"></a>
       <div class="info">
-        <h3><a href="projects/acoustic-modem.html">Underwater acoustic modem<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></h3>
+        <h3><a href="projects/acoustic-modem.html">Underwater acoustic modem</a></h3>
         <p class="where">ARVP RoboSub team · <span class="num">Jul 2026</span> – now</p>
-        <p class="desc">Helping the team build a modem so our subs can talk underwater. I’ve tested and modelled the piezo transducers in MATLAB, and now I’m working on the transmit circuit.</p>
+        <p class="desc">I’m on the team building an acoustic modem so ARVP’s submarines can send data to each other underwater. My part has been testing and modelling the piezo transducers, and designing the transmit circuit.</p>
+        <p class="why"><b>Why:</b> Radio barely travels through water, so the subs have to talk using sound.</p>
         <p class="used">MATLAB · LTspice · Analog Discovery 2</p>
+        <p class="more"><a class="textlink" href="projects/acoustic-modem.html">Full write-up<svg class="i i-r" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></p>
       </div>
-    </article>
+    </div>
+    <dl class="story">
+      <div><dt>The problem I ran into</dt><dd>The transducers are rated for 65&nbsp;kHz, but in the pool they responded most strongly near 149&nbsp;kHz. My first circuit model of them was also off by 18%.</dd></div>
+      <div><dt>How I fixed it</dt><dd>A hand calculation matched the 149&nbsp;kHz peak to the tube vibrating along its length. I argued for testing carriers in the pool, which showed a usable band around 45–60&nbsp;kHz, and I rebuilt the model with a second resonance.</dd></div>
+      <div><dt>What it improved</dt><dd>Model error dropped from 18% to 3%. With an accurate model, I sized a matching inductor that gets about 21 times more power into the transducer in simulation.</dd></div>
+    </dl>
+  </article>
 
-    <article class="proj">
-      <a class="pic panel cover" href="projects/mp3-player.html" tabindex="-1" aria-hidden="true"><img src="img/mp3-schematic.jpg" width="2509" height="1546" loading="lazy" alt="Altium schematic of the MP3 player: power, USB and the ESP32 on the left, the VS1053 decoder and audio jack on the right"></a>
+  <article class="proj" id="mp3">
+    <div class="top">
+      <a class="pic panel board" href="projects/mp3-player.html" tabindex="-1" aria-hidden="true"><img src="img/mp3-pcb-top.png" width="460" height="658" loading="lazy" alt="Top side of my MP3 player circuit board, rendered from the Gerber files"></a>
       <div class="info">
-        <h3><a href="projects/mp3-player.html">MP3 player<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></h3>
+        <h3><a href="projects/mp3-player.html">MP3 player</a></h3>
         <p class="where">Personal project · <span class="num">2026</span></p>
-        <p class="desc">My own offline music player, from the circuit board to the firmware and a 3D-printed case. It runs about 17&nbsp;hours per charge, and version two is in design.</p>
+        <p class="desc">An offline music player I designed from scratch: a 4-layer circuit board, the firmware and a 3D-printed case. It plays from an SD card and runs about 17&nbsp;hours per charge.</p>
+        <p class="why"><b>Why:</b> Paying for music streaming subscriptions for my family got too expensive, so I built my own player. I ended up using it every day.</p>
         <p class="used">ESP32 · C++ · Altium · Fusion 360</p>
+        <p class="more"><a class="textlink" href="projects/mp3-player.html">Full write-up<svg class="i i-r" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a><a class="textlink" href="https://drive.google.com/file/d/1-BPB9EZshVwInmu3_R_qBqkqG8TPMAxt/view?usp=sharing"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-play"></use></svg>Watch it play music</a></p>
       </div>
-    </article>
+    </div>
+    <dl class="story">
+      <div><dt>The problem I ran into</dt><dd>It kept resetting in the middle of songs. Measuring the 3.3&nbsp;V supply showed it dipping by about 350&nbsp;mV whenever I skipped a track.</dd></div>
+      <div><dt>How I fixed it</dt><dd>I wrote a Python script to measure the supply under five different loads, found that skipping was the only one that failed, and swapped the 22&nbsp;µF bulk capacitor for 100&nbsp;µF.</dd></div>
+      <div><dt>What it improved</dt><dd>The skipping test now passes. The heaviest case, full volume with rapid skipping, still dips, so it isn’t completely solved.</dd></div>
+    </dl>
+  </article>
 
-    <article class="proj">
+  <article class="proj" id="beam">
+    <div class="top">
       <a class="pic panel" href="projects/ball-and-beam.html" tabindex="-1" aria-hidden="true"><img src="img/ball-beam-step.png" width="1467" height="922" loading="lazy" alt="Motor position step response, simulation against hardware"></a>
       <div class="info">
-        <h3><a href="projects/ball-and-beam.html">Ball and beam control system<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></h3>
+        <h3><a href="projects/ball-and-beam.html">Ball and beam control system</a></h3>
         <p class="where">Course project</p>
-        <p class="desc">Balancing a ball on a motor-driven beam, from identifying the motor to designing the controller and testing it on real hardware.</p>
+        <p class="desc">A controller that balances a ball on a motor-driven beam, taken from measuring the motor through to running on real hardware.</p>
+        <p class="why"><b>Why:</b> It was a controls course project. The goal was a controller that works on the actual hardware, and matches what the simulation predicts.</p>
         <p class="used">MATLAB · Simulink Real-Time</p>
+        <p class="more"><a class="textlink" href="projects/ball-and-beam.html">Full write-up<svg class="i i-r" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></p>
       </div>
-    </article>
+    </div>
+    <dl class="story">
+      <div><dt>The problem I ran into</dt><dd>A controller is only as good as the motor model behind it, and I had to choose between controlling the motor by voltage or by current.</dd></div>
+      <div><dt>How I fixed it</dt><dd>I measured the motor on the bench until its torque constant and inertia matched the datasheet within about 5%, compared both approaches in simulation, and went with cascaded current and velocity loops plus a lead compensator for position.</dd></div>
+      <div><dt>What it improved</dt><dd>On hardware the ball settles in under 2&nbsp;seconds with no steady-state error and under 10% overshoot, and it recovers from a disturbance in under 200&nbsp;ms.</dd></div>
+    </dl>
+  </article>
 
-    <article class="proj">
-      <a class="pic panel dark" href="projects/verilog-pid.html" tabindex="-1" aria-hidden="true"><img src="img/pid-step.png" width="1500" height="930" loading="lazy" alt="Closed-loop step response of the Verilog PID: the original design oscillates, the fixed design settles"></a>
+  <article class="proj" id="pid">
+    <div class="top">
+      <a class="pic panel dark" href="projects/verilog-pid.html" tabindex="-1" aria-hidden="true"><img src="img/pid-step.png" width="1500" height="930" loading="lazy" alt="Closed-loop step response: the original design keeps oscillating, the fixed design settles"></a>
       <div class="info">
-        <h3><a href="projects/verilog-pid.html">Verilog PID controller<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></h3>
+        <h3><a href="projects/verilog-pid.html">Verilog PID controller</a></h3>
         <p class="where">Personal project</p>
-        <p class="desc">A fixed-point PID controller in RTL. It passed every test vector, then a closed-loop simulation showed it never settled. I tracked down why and fixed it.</p>
+        <p class="desc">A PID controller written in Verilog with fixed-point math, plus a testbench that checks every output automatically against a Python reference model.</p>
+        <p class="why"><b>Why:</b> I wanted to learn how a control loop is built in digital hardware, and how to test one properly.</p>
         <p class="used">Verilog · Vivado · Icarus · Python</p>
+        <p class="more"><a class="textlink" href="projects/verilog-pid.html">Full write-up<svg class="i i-r" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></p>
       </div>
-    </article>
+    </div>
+    <dl class="story">
+      <div><dt>The problem I ran into</dt><dd>It passed all 6,980 test vectors, but in a closed-loop simulation the output never settled. It kept swinging between about 82% and 105% of the target.</dd></div>
+      <div><dt>How I fixed it</dt><dd>The deadband logic was zeroing the output and wiping the integrator whenever the error got small, which kicked the system back out. I changed it to hold the output and freeze the integrator.</dd></div>
+      <div><dt>What it improved</dt><dd>The loop now settles to within ±0.4% of the target.</dd></div>
+    </dl>
+  </article>
 
-  <div class="small-projects">
-    <div><h3>Heat safety wearable</h3><p class="where">ESP32 · low-power firmware</p><p>A helmet-mounted temperature monitor that warns workers of heatstroke risk. The firmware sleeps between readings and steps through five alert levels. I also tested LoRa and GPS for sites without Wi-Fi.</p></div>
-  </div>
-</section>
-
-<section class="log" id="log" aria-labelledby="log-h">
-  <div class="sec-head">
-    <h2 id="log-h">Bugs I’ve chased&nbsp;down</h2>
-    <p>Short write-ups on things that broke and how I worked them out.</p>
-  </div>
-  <ul>
-<li><a href="projects/acoustic-modem.html#match"><span class="date">Nov 2026</span><span class="t">Impedance matching the transducer&nbsp;driver</span><span class="s">At 55&nbsp;kHz our transducer looks mostly like a capacitor. A 1.16&nbsp;mH series inductor cancels it, and in LTspice the power at 6&nbsp;V went from about 10&nbsp;mW to&nbsp;200&nbsp;mW.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
-<li><a href="projects/acoustic-modem.html#hop"><span class="date">Oct 2026</span><span class="t">Frequency hopping to reduce echo&nbsp;errors</span><span class="s">The modem now hops between 54/57&nbsp;kHz and 55/61&nbsp;kHz on every other symbol. An echo from one symbol lands on the pair we aren’t listening to.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
-<li><a href="notes/bvd-peeling.html"><span class="date">Oct 2026</span><span class="t">Modelling a transducer with two&nbsp;resonances</span><span class="s">Our transducer had a weak second mode buried under the main one. Peeling them apart in MATLAB took the model from 18% error to&nbsp;3%.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
-<li><a href="notes/mp3-brownout.html"><span class="date">Oct 2026</span><span class="t">Why my MP3 player kept&nbsp;resetting</span><span class="s">The supply dipped every time I skipped a song. A bigger capacitor fixed most of&nbsp;it.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
-<li><a href="projects/acoustic-modem.html#band"><span class="date">Oct 2026</span><span class="t">Finding the usable band: about 45–60&nbsp;kHz</span><span class="s">We tested carriers in the pool instead of trusting the 65&nbsp;kHz on the spec&nbsp;sheet.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
-<li><a href="projects/acoustic-modem.html#axial"><span class="date">Sep 2026</span><span class="t">Our 65&nbsp;kHz transducers were ringing at 149&nbsp;kHz</span><span class="s">A hand calculation matched it to the length mode of the&nbsp;tube.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
-<li><a href="projects/verilog-pid.html"><span class="date">Earlier</span><span class="t">A PID controller that never&nbsp;settled</span><span class="s">Every test passed, but the deadband logic kept kicking the loop back&nbsp;out.</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"></use></svg></a></li>
-  </ul>
 </section>
 
 <section class="exp" id="experience" aria-labelledby="exp-h">
@@ -134,8 +146,6 @@
           <li>Fitted a two-branch Butterworth–Van Dyke model to underwater impedance sweeps of both transducers, cutting RMS error from about 17% to 2–3% versus the closed-form formulas, and used it as the load in LTspice simulations of the Tx driver.</li>
           <li>Ran a scripted 300-step gated-pulse sweep (30–80 kHz) with two USB oscilloscopes to pick the carrier frequency and bandwidth.</li>
           <li>Root-caused a ~149 kHz resonance versus the 65 kHz spec to the transducer’s axial mode using MATLAB FFT sweeps and hand calculations.</li>
-          <li>Measured received signal and SNR versus distance in pool tests, finding the oscilloscope’s noise floor was the limit on SNR, and verified the acoustic link out to 15 m.</li>
-          <li>Ran and documented pool tests of reciprocity, ring-down and Tx/Rx sensitivity, automating the analysis in MATLAB.</li>
         </ul>
       </div>
     </div>
@@ -148,9 +158,6 @@
           <li>Integrated live GPS and fuel data through a REST API into an Excel fueling schedule, cutting fueling wait times by about 73%.</li>
           <li>Automated import, cleaning and validation of 10,000+ rows of sensor data with Excel VBA, saving about 6–7 hours a week.</li>
           <li>Debugged mismatches between equipment telemetry and field records, tracing them to ArcGIS geofence and capture settings.</li>
-          <li>Compared vendor specifications against SAP baselines on several $1M+ project bids, catching material discrepancies before kickoff.</li>
-          <li>Built Power BI dashboards of equipment telemetry for daily production meetings, supporting decisions that raised site productivity about 11%.</li>
-          <li>Wrote Job Safety Analyses while working on site around heavy mining equipment, with no incidents over 8 months.</li>
         </ul>
       </div>
     </div>
@@ -162,15 +169,6 @@
         <ul><li>Coursework: Control Systems, Embedded Systems, Power Engineering, Electronic Devices, Signals &amp; Systems, Digital Logic, Circuits I &amp; II.</li></ul>
       </div>
     </div>
-  </div>
-  <div class="skills">
-    <h3>Tools I use</h3>
-    <dl>
-      <div><dt>Digital design</dt><dd>Verilog (RTL), Vivado, self-checking testbenches, test plans, waveform debug, FPGA</dd></div>
-      <div><dt>Programming</dt><dd>C, C++, Python, MATLAB, Simulink, Git, Excel VBA, Power BI</dd></div>
-      <div><dt>Embedded</dt><dd>ESP32, Arduino, AVR (MPLAB X), SPI, I²C, UART, interrupts</dd></div>
-      <div><dt>Lab and PCB</dt><dd>Altium Designer, LTspice, soldering and rework, H-bridge motor drives, oscilloscopes, Analog Discovery 2, Fusion 360, 3D printing</dd></div>
-    </dl>
   </div>
 </section>
 

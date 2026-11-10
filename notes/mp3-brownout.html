@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Why my MP3 player kept resetting · Dhruvil Patel</title>
-<meta name="description" content="Build log: how I tracked down random resets on my ESP32 MP3 player to a supply dip when skipping songs, and what I changed.">
+<meta name="description" content="How I tracked down random resets on my ESP32 MP3 player to a supply dip when skipping songs, and what I changed.">
 <meta name="theme-color" content="#f5f7f3">
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambarino@400&f[]=general-sans@400,500&display=swap">
-<link rel="stylesheet" href="../site.css?v=4">
-<script src="../site.js?v=4" defer></script>
+<link rel="stylesheet" href="../site.css?v=5">
+<script src="../site.js?v=5" defer></script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -30,12 +30,12 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="page-top">
   <a class="mark" href="../">Dhruvil Patel</a>
-  <nav aria-label="Site"><a href="../#projects">Projects</a><a href="../#log">Build log</a><a href="mailto:dhruvil2@ualberta.ca">Email me</a></nav>
+  <nav aria-label="Site"><a href="../#projects">Projects</a><a href="../#experience">Experience</a><a href="mailto:dhruvil2@ualberta.ca">Email me</a></nav>
 </header>
 <main id="main">
 <div class="art-head">
   <h1>Why my MP3 player kept resetting</h1>
-  <div class="meta"><span>Build log · MP3 player</span><span>October 2026</span><span>ESP32 · Power · Analog Discovery 2 · Python</span></div>
+  <div class="meta"><span>MP3 player</span><span>October 2026</span><span>ESP32 · Power · Analog Discovery 2 · Python</span></div>
   <p class="dek">My homemade music player rebooted itself whenever I skipped songs. Here’s how I narrowed it down to a dip on the power rail, what I changed, and what still isn’t fixed.</p>
 </div>
 <article class="art">
@@ -66,12 +66,6 @@
 <p>I swapped the 22 µF bulk capacitor for a 100 µF one. With almost five times the capacitance, the same burst should cause roughly a fifth of the dip, and after the change the skipping test passed.</p>
 <h2>What still isn’t solved</h2>
 <p>I later built a tool called RailCheck that runs the same rail tests automatically on the real board. Every test passed except one: playing at full volume while skipping songs back and forth quickly. That’s the heaviest load the player sees, and the rail still dips there. The bigger capacitor helped, but it didn’t fully fix the problem.</p>
-<p>I’m fixing the power design properly in the second version of the board. A few decisions so far:</p>
-<ul>
-  <li>Keep linear regulators (LDOs) for the supply. A switching regulator (a buck converter) would use less battery, but it constantly switches on and off, and that electrical noise can leak into the audio. LDOs give a cleaner supply.</li>
-  <li>Move to an ESP32-S3 module.</li>
-  <li>Make the player thinner.</li>
-</ul>
 <figure class="narrow">
   <div class="panel"><img src="../img/mp3-pcb-top.png" width="460" height="658" loading="lazy" alt="Top side of the MP3 player PCB, rendered from the Gerber files."></div>
   <figcaption>Top side of the board, rendered from my Gerber files. The analog section sits above the dividing line, the digital section below.</figcaption>
